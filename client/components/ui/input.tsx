@@ -15,39 +15,46 @@ export const Input: React.FC<InputProps> = ({
   className = "",
   type = "text",
   rightElement,
+  value,
   ...props
 }) => {
   return (
-    <div className="w-full flex flex-col gap-1.5 group">
-      {label && (
-        <label
-          htmlFor={id}
-          className="text-sm font-medium text-zinc-700 transition-colors group-focus-within:text-indigo-600 dark:text-zinc-300 dark:group-focus-within:text-indigo-400"
-        >
-          {label}
-        </label>
-      )}
-      <div className="relative w-full flex items-center">
+    <div className="w-full flex flex-col relative group">
+      <div className="relative w-full flex items-end">
         <input
           id={id}
           type={type}
-          className={`w-full rounded-xl border border-zinc-200 bg-zinc-50/50 px-4 py-3 text-zinc-900 shadow-sm shadow-zinc-200/20 transition-all duration-300 hover:border-zinc-300 hover:bg-zinc-50 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-50 dark:shadow-none dark:hover:border-zinc-700 dark:hover:bg-zinc-900 dark:focus:border-indigo-500 dark:focus:bg-zinc-950 dark:focus:ring-indigo-500/20 ${
-            rightElement ? "pr-12" : ""
+          value={value}
+          placeholder=" "
+          className={`peer w-full border-b-[1.5px] border-[var(--text-muted)]/30 bg-transparent py-2 text-[var(--text-primary)] text-2xl sm:text-3xl font-bold transition-all duration-500 focus:border-[var(--text-primary)] focus:outline-none placeholder:text-transparent ${
+            rightElement ? "pr-16" : ""
           } ${
             error
-              ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+              ? "border-red-400 focus:border-red-500"
               : ""
           } ${className}`}
           {...props}
         />
+        {label && (
+          <label
+            htmlFor={id}
+            className={`absolute left-0 transition-all duration-500 pointer-events-none ${
+              value
+                ? "-top-4 text-[10px] font-bold text-[var(--text-primary)] uppercase tracking-widest"
+                : "top-2 text-xl sm:text-2xl font-semibold text-[var(--text-muted)] peer-focus:-top-4 peer-focus:text-[10px] peer-focus:font-bold peer-focus:text-[var(--text-primary)] peer-focus:uppercase peer-focus:tracking-widest"
+            }`}
+          >
+            {label}
+          </label>
+        )}
         {rightElement && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-zinc-400 hover:text-zinc-650 dark:text-zinc-500 dark:hover:text-zinc-350 transition-colors">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center z-10">
             {rightElement}
           </div>
         )}
       </div>
       {error && (
-        <span className="text-xs text-red-500 font-medium animate-in slide-in-from-top-1 fade-in duration-200">{error}</span>
+        <span className="absolute -bottom-5 left-0 text-[10px] font-bold text-red-500 tracking-wide animate-in slide-in-from-top-1 fade-in duration-200">{error}</span>
       )}
     </div>
   );
