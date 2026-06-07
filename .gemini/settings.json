@@ -3,20 +3,14 @@
     "AfterAgent": [
       {
         "hooks": [
-          {
-            "name": "entire-after-agent",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini after-agent'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini after-agent'"
         ]
       }
     ],
     "AfterModel": [
       {
         "hooks": [
-          {
-            "name": "entire-after-model",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini after-model'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini after-model'"
         ]
       }
     ],
@@ -24,30 +18,21 @@
       {
         "matcher": "*",
         "hooks": [
-          {
-            "name": "entire-after-tool",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini after-tool'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini after-tool'"
         ]
       }
     ],
     "BeforeAgent": [
       {
         "hooks": [
-          {
-            "name": "entire-before-agent",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini before-agent'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini before-agent'"
         ]
       }
     ],
     "BeforeModel": [
       {
         "hooks": [
-          {
-            "name": "entire-before-model",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini before-model'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini before-model'"
         ]
       }
     ],
@@ -55,40 +40,28 @@
       {
         "matcher": "*",
         "hooks": [
-          {
-            "name": "entire-before-tool",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini before-tool'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini before-tool'"
         ]
       }
     ],
     "BeforeToolSelection": [
       {
         "hooks": [
-          {
-            "name": "entire-before-tool-selection",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini before-tool-selection'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini before-tool-selection'"
         ]
       }
     ],
     "Notification": [
       {
         "hooks": [
-          {
-            "name": "entire-notification",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini notification'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini notification'"
         ]
       }
     ],
     "PreCompress": [
       {
         "hooks": [
-          {
-            "name": "entire-pre-compress",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini pre-compress'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini pre-compress'"
         ]
       }
     ],
@@ -96,29 +69,20 @@
       {
         "matcher": "exit",
         "hooks": [
-          {
-            "name": "entire-session-end-exit",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini session-end'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini session-end'"
         ]
       },
       {
         "matcher": "logout",
         "hooks": [
-          {
-            "name": "entire-session-end-logout",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini session-end'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini session-end'"
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          {
-            "name": "entire-session-start",
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else printf \"%s\\n\" \"{\\\"systemMessage\\\":\\\"Entire CLI is enabled but not installed or not on PATH. Installation guide: https://docs.entire.io/cli/installation#installation-methods\\\"}\"; exit 0; fi; exec $E hooks gemini session-start'"
-          }
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else printf \"%s\\n\" \"{\\\"systemMessage\\\":\\\"Entire CLI is enabled but not installed or not on PATH. Installation guide: https://docs.entire.io/cli/installation#installation-methods\\\"}\"; exit 0; fi; fi; exec $E hooks gemini session-start'"
         ]
       }
     ]
