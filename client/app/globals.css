@@ -85,6 +85,15 @@ body {
   animation: pulse-logo 1.6s ease-in-out infinite;
 }
 
+@keyframes char-fade {
+  0% { opacity: 0; transform: translateY(15px); filter: blur(3px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+.char-fade-in {
+  animation: char-fade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .reveal-on-scroll {
   opacity: 0;
   transform: translateY(40px);
@@ -104,3 +113,57 @@ body {
               color 0.8s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Tailwind Animate compatibility layer to prevent opacity-0 stuck issues */
+@keyframes enter {
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) 
+               scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1)) 
+               rotate(var(--tw-enter-rotate, 0));
+  }
+}
+
+.animate-in {
+  animation-name: enter;
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  --tw-enter-opacity: 0;
+}
+
+.zoom-in-95 {
+  --tw-enter-scale: 0.95;
+}
+
+.zoom-in-90 {
+  --tw-enter-scale: 0.90;
+}
+
+.zoom-in {
+  --tw-enter-scale: 0.90;
+}
+
+.slide-in-from-bottom-2 {
+  --tw-enter-translate-y: 0.5rem;
+}
+
+.slide-in-from-bottom-8 {
+  --tw-enter-translate-y: 2rem;
+}
+
+.slide-in-from-bottom-12 {
+  --tw-enter-translate-y: 3rem;
+}
+
+.slide-in-from-right-8 {
+  --tw-enter-translate-x: 2rem;
+}
+
+.slide-in-from-left-2 {
+  --tw-enter-translate-x: -0.5rem;
+}
+
