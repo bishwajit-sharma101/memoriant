@@ -5,8 +5,7 @@
         "hooks": [
           {
             "name": "entire-after-agent",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini after-agent'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini after-agent'"
           }
         ]
       }
@@ -16,8 +15,7 @@
         "hooks": [
           {
             "name": "entire-after-model",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini after-model'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini after-model'"
           }
         ]
       }
@@ -28,8 +26,7 @@
         "hooks": [
           {
             "name": "entire-after-tool",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini after-tool'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini after-tool'"
           }
         ]
       }
@@ -39,8 +36,7 @@
         "hooks": [
           {
             "name": "entire-before-agent",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini before-agent'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini before-agent'"
           }
         ]
       }
@@ -50,8 +46,7 @@
         "hooks": [
           {
             "name": "entire-before-model",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini before-model'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini before-model'"
           }
         ]
       }
@@ -62,8 +57,7 @@
         "hooks": [
           {
             "name": "entire-before-tool",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini before-tool'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini before-tool'"
           }
         ]
       }
@@ -73,8 +67,7 @@
         "hooks": [
           {
             "name": "entire-before-tool-selection",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini before-tool-selection'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini before-tool-selection'"
           }
         ]
       }
@@ -84,8 +77,7 @@
         "hooks": [
           {
             "name": "entire-notification",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini notification'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini notification'"
           }
         ]
       }
@@ -95,8 +87,7 @@
         "hooks": [
           {
             "name": "entire-pre-compress",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini pre-compress'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini pre-compress'"
           }
         ]
       }
@@ -107,8 +98,7 @@
         "hooks": [
           {
             "name": "entire-session-end-exit",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini session-end'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini session-end'"
           }
         ]
       },
@@ -117,8 +107,7 @@
         "hooks": [
           {
             "name": "entire-session-end-logout",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks gemini session-end'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else exit 0; fi; exec $E hooks gemini session-end'"
           }
         ]
       }
@@ -128,8 +117,7 @@
         "hooks": [
           {
             "name": "entire-session-start",
-            "type": "command",
-            "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then printf \"%s\\n\" \"{\\\"systemMessage\\\":\\\"Entire CLI is enabled but not installed or not on PATH. Installation guide: https://docs.entire.io/cli/installation#installation-methods\\\"}\"; exit 0; fi; exec entire hooks gemini session-start'"
+            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; elif [ -f \"./entire.exe\" ]; then E=\"./entire.exe\"; elif [ -f \"./entire\" ]; then E=\"./entire\"; else printf \"%s\\n\" \"{\\\"systemMessage\\\":\\\"Entire CLI is enabled but not installed or not on PATH. Installation guide: https://docs.entire.io/cli/installation#installation-methods\\\"}\"; exit 0; fi; exec $E hooks gemini session-start'"
           }
         ]
       }
