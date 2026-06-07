@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
 export const SignUpForm: React.FC = () => {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +19,15 @@ export const SignUpForm: React.FC = () => {
   }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [authSuccess, setAuthSuccess] = useState(false);
+
+  useEffect(() => {
+    if (authSuccess) {
+      const timer = setTimeout(() => {
+        router.push("/dashboard");
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [authSuccess, router]);
 
   const validate = () => {
     const newErrors: typeof errors = {};
