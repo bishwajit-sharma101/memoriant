@@ -1,0 +1,42 @@
+okk...so this is basically what we have to do EagerMinds — Take-Home Build Task
+Role: Software Developer · Tooling: use an AI coding agent (encouraged)
+
+Hi, and thanks for getting this far. This is a small, hands-on build task. We're not testing how much code you can type — we're testing how you think, how you drive an AI coding agent, and whether you can stand up real services and wire them together.
+
+Please use whatever coding agent you like (Claude Code, Cursor, Copilot, etc.). Honestly, we expect the agent to get some things wrong — that's normal. What we want to see is you noticing when it's wrong and steering it to a correct result. A working, correct, secure result matters far more than a big pile of code.
+
+What to build
+A small personal bookmarks app — think a tiny "linktree meets pocket".
+
+Accounts — people can sign up and log in with email + password. New sign-ups receive a welcome / confirmation email.
+Bookmarks — a signed-in user can add, edit, and delete their own bookmarks. Each bookmark has a title, a URL, and a public / private flag.
+Privacy — a user's bookmarks belong to that user. One user must never be able to read, edit, or delete another user's data. Treat this as a real requirement, not a UI detail: assume people will poke at your URLs and API directly, not just click around the screen.
+Public profile — each user can claim a unique @handle. Anyone (no login) can visit /<handle> and see that user's public bookmarks only. Handles are unique — two people can't end up with the same one.
+Dashboard — once logged in, a user lands on a simple dashboard of their bookmarks. Logged-out visitors shouldn't be able to reach it.
+Platforms you'll set up
+Part of this task is wiring real services together and putting their credentials in the right place.
+
+Supabase — authentication + database.
+Resend (or a similar email provider) — to send the sign-up email.
+Vercel — deploy it so we get a live URL.
+You'll need free accounts on each. Getting the keys and configuring them correctly is part of the exercise.
+
+Stack
+Any framework you're comfortable with (Next.js, Remix, SvelteKit, etc.), with Supabase.
+TypeScript preferred.
+What to send back
+A live URL (deployed on Vercel) we can actually use.
+A GitHub repo we can read. Please commit as you go — we like to see how the work progressed, not one giant commit at the end.
+A short README with:
+how to run it locally,
+where your AI agent got something wrong, and how you caught and fixed it (2–4 honest sentences — this is the part we care about most),
+one thing you'd improve with more time.
+Your agent sessions. We review your process, not just the final code. Use Entire CLI (https://github.com/entireio/cli) to record your coding-agent sessions and push them to your repo, so we can see how you worked with the agent and where you corrected it.
+It supports Claude Code, Cursor, Codex, Copilot CLI, Gemini CLI, and more — so it works with whatever agent you choose. It auto-redacts detected secrets, and keeps your main branch clean by storing sessions on a separate entire/checkpoints/v1 branch.
+Install: brew install --cask entire (or curl -fsSL https://entire.io/install.sh | bash).
+Set it up and confirm your sessions are pushing to GitHub before you start building — if it's not syncing, fix that first.
+A few rules
+Take the time you need — there's no clock. If you decide to stop somewhere, just note what's
+done and what you'd do next.
+Real, honest work only — we'll talk through your code and decisions in a 15-minute call
+Questions? Just reply to this email. Good luck — have fun with it....and we will do this one by one , and make sure it modular and all that ....so lets start with the signin and signup page , make them and also make sure its not your generic one , make sure this has some flavour and looks premium and smooth to use , it should look viusuallu stunning so lets gets started only with the signin and signup page

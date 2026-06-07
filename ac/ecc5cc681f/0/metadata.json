@@ -1,0 +1,59 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "acecc5cc681f",
+  "session_id": "a8317e4f-c6a1-4be7-b621-e328c61b4816",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-07T13:16:47.299164Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "client/app/signin/page.tsx",
+    "client/app/signup/page.tsx",
+    "client/components/auth/auth-card.tsx",
+    "client/components/auth/signin-form.tsx",
+    "client/components/auth/signup-form.tsx",
+    "client/components/ui/button.tsx",
+    "client/components/ui/input.tsx"
+  ],
+  "agent": "Gemini CLI",
+  "model": "gemini-3.1-pro-preview",
+  "turn_id": "84e241c9d244",
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-07T13:16:47.2620991Z",
+    "agent_lines": 159,
+    "agent_removed": 104,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 127,
+    "total_committed": 159,
+    "total_lines_changed": 411,
+    "agent_percentage": 63.990267639902676,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 528,
+      "user_lines_removed": 127,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/settings.json": 29,
+        ".gemini/settings.json": 61,
+        "client/app/signup/page.tsx": 133,
+        "client/components/auth/signup-form.tsx": 284,
+        "client/components/ui/input.tsx": 21
+      },
+      "user_removed_per_file": {
+        ".claude/settings.json": 8,
+        ".gemini/settings.json": 13,
+        "client/app/signup/page.tsx": 8,
+        "client/components/auth/signup-form.tsx": 88,
+        "client/components/ui/input.tsx": 10
+      }
+    }
+  ]
+}

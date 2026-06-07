@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "acecc5cc681f",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "client/app/signin/page.tsx",
+    "client/app/signup/page.tsx",
+    "client/components/auth/auth-card.tsx",
+    "client/components/auth/signin-form.tsx",
+    "client/components/auth/signup-form.tsx",
+    "client/components/ui/button.tsx",
+    "client/components/ui/input.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ac/ecc5cc681f/0/metadata.json",
+      "transcript": "/ac/ecc5cc681f/0/full.jsonl",
+      "content_hash": "/ac/ecc5cc681f/0/content_hash.txt",
+      "prompt": "/ac/ecc5cc681f/0/prompt.txt"
+    }
+  ]
+}
