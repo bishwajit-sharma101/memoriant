@@ -18,23 +18,23 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-98";
+    "relative inline-flex items-center justify-center rounded-xl font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer active:scale-[0.98] overflow-hidden";
 
   const variants = {
     primary:
-      "bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-lg shadow-indigo-500/20 focus:ring-indigo-500",
+      "bg-gradient-to-tr from-indigo-600 to-violet-500 hover:from-indigo-500 hover:to-violet-400 text-white shadow-[0_4px_14px_0_rgba(99,102,241,0.39)] hover:shadow-[0_6px_20px_rgba(99,102,241,0.23)] hover:-translate-y-0.5 focus:ring-indigo-500 ring-1 ring-white/20",
     secondary:
-      "bg-zinc-800 hover:bg-zinc-700 text-zinc-100 dark:bg-zinc-200 dark:hover:bg-zinc-100 dark:text-zinc-900 focus:ring-zinc-500",
+      "bg-zinc-900 hover:bg-zinc-800 text-zinc-100 shadow-sm dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 focus:ring-zinc-900 dark:focus:ring-white",
     outline:
-      "border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-zinc-700 dark:text-zinc-300 focus:ring-zinc-500",
+      "border-2 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 hover:bg-zinc-50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900 text-zinc-700 dark:text-zinc-300 focus:ring-zinc-200 dark:focus:ring-zinc-800",
     ghost:
-      "hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400 focus:ring-zinc-500",
+      "hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 text-zinc-600 dark:text-zinc-400 focus:ring-zinc-200 dark:focus:ring-zinc-800",
   };
 
   const sizes = {
-    sm: "px-3 py-1.5 text-sm",
-    md: "px-4 py-2.5 text-base",
-    lg: "px-6 py-3 text-lg",
+    sm: "px-4 py-2 text-sm",
+    md: "px-5 py-3 text-sm font-semibold",
+    lg: "px-8 py-4 text-base font-semibold",
   };
 
   return (
@@ -43,9 +43,14 @@ export const Button: React.FC<ButtonProps> = ({
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}
     >
+      {/* Shine effect overlay for primary button */}
+      {variant === "primary" && (
+        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-out hover:translate-x-full pointer-events-none" />
+      )}
+      
       {isLoading ? (
         <svg
-          className="animate-spin -ml-1 mr-2 h-5 w-5 text-current"
+          className="animate-spin -ml-1 mr-2 h-5 w-5 text-current relative z-10"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -64,7 +69,7 @@ export const Button: React.FC<ButtonProps> = ({
           />
         </svg>
       ) : null}
-      {children}
+      <span className="relative z-10 flex items-center gap-2">{children}</span>
     </button>
   );
 };

@@ -3,14 +3,22 @@
     "AfterAgent": [
       {
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini after-agent'"
+          {
+            "name": "entire-after-agent",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini after-agent"
+          }
         ]
       }
     ],
     "AfterModel": [
       {
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini after-model'"
+          {
+            "name": "entire-after-model",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini after-model"
+          }
         ]
       }
     ],
@@ -18,21 +26,33 @@
       {
         "matcher": "*",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini after-tool'"
+          {
+            "name": "entire-after-tool",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini after-tool"
+          }
         ]
       }
     ],
     "BeforeAgent": [
       {
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini before-agent'"
+          {
+            "name": "entire-before-agent",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini before-agent"
+          }
         ]
       }
     ],
     "BeforeModel": [
       {
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini before-model'"
+          {
+            "name": "entire-before-model",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini before-model"
+          }
         ]
       }
     ],
@@ -40,28 +60,44 @@
       {
         "matcher": "*",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini before-tool'"
+          {
+            "name": "entire-before-tool",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini before-tool"
+          }
         ]
       }
     ],
     "BeforeToolSelection": [
       {
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini before-tool-selection'"
+          {
+            "name": "entire-before-tool-selection",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini before-tool-selection"
+          }
         ]
       }
     ],
     "Notification": [
       {
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini notification'"
+          {
+            "name": "entire-notification",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini notification"
+          }
         ]
       }
     ],
     "PreCompress": [
       {
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini pre-compress'"
+          {
+            "name": "entire-pre-compress",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini pre-compress"
+          }
         ]
       }
     ],
@@ -69,20 +105,32 @@
       {
         "matcher": "exit",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini session-end'"
+          {
+            "name": "entire-session-end-exit",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini session-end-exit"
+          }
         ]
       },
       {
         "matcher": "logout",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks gemini session-end'"
+          {
+            "name": "entire-session-end-logout",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini session-end-logout"
+          }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else printf \"%s\\n\" \"{\\\"systemMessage\\\":\\\"Entire CLI is enabled but not installed or not on PATH. Installation guide: https://docs.entire.io/cli/installation#installation-methods\\\"}\"; exit 0; fi; fi; exec $E hooks gemini session-start'"
+          {
+            "name": "entire-session-start",
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks gemini session-start"
+          }
         ]
       }
     ]

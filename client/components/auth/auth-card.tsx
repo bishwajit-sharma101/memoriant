@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 
 interface AuthCardProps {
   children: React.ReactNode;
@@ -15,13 +14,18 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   subtitle,
 }) => {
   return (
-    <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-zinc-200/50 bg-white/70 p-8 shadow-2xl backdrop-blur-xl transition-all duration-300 dark:border-zinc-800/50 dark:bg-zinc-950/70 sm:p-10">
-      {/* Decorative gradient glowing spots */}
-      <div className="absolute -top-40 -left-40 -z-10 h-80 w-80 rounded-full bg-indigo-500/10 blur-3xl" />
-      <div className="absolute -bottom-40 -right-40 -z-10 h-80 w-80 rounded-full bg-violet-500/10 blur-3xl" />
+    <div 
+      className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-zinc-200/50 bg-white/60 p-8 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] backdrop-blur-2xl transition-all duration-700 ease-out dark:border-white/10 dark:bg-zinc-950/50 dark:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)] sm:p-10 animate-in fade-in zoom-in-95 fill-mode-forwards duration-700"
+    >
+      {/* Inner highlight for glass effect */}
+      <div className="absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/20 pointer-events-none dark:ring-white/5" />
 
-      <div className="flex flex-col items-center mb-8">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 dark:bg-indigo-500">
+      {/* Decorative gradient glowing spots inside card */}
+      <div className="absolute -top-40 -left-40 -z-10 h-80 w-80 rounded-full bg-indigo-500/15 blur-[64px]" />
+      <div className="absolute -bottom-40 -right-40 -z-10 h-80 w-80 rounded-full bg-violet-500/15 blur-[64px]" />
+
+      <div className="flex flex-col items-center mb-8 relative z-10">
+        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white shadow-xl shadow-indigo-500/30 ring-1 ring-white/20 dark:from-indigo-500 dark:to-violet-400">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -40,12 +44,14 @@ export const AuthCard: React.FC<AuthCardProps> = ({
         <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
           {title}
         </h2>
-        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 text-center">
+        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400 text-center max-w-[90%]">
           {subtitle}
         </p>
       </div>
 
-      {children}
+      <div className="relative z-10">
+        {children}
+      </div>
     </div>
   );
 };

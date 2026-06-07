@@ -4,13 +4,19 @@
       {
         "matcher": "Task",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks claude-code post-task'"
+          {
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks claude-code post-task"
+          }
         ]
       },
       {
         "matcher": "TodoWrite",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks claude-code post-todo'"
+          {
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks claude-code post-todo"
+          }
         ]
       }
     ],
@@ -18,7 +24,10 @@
       {
         "matcher": "Task",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks claude-code pre-task'"
+          {
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks claude-code pre-task"
+          }
         ]
       }
     ],
@@ -26,7 +35,10 @@
       {
         "matcher": "",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks claude-code session-end'"
+          {
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks claude-code session-end"
+          }
         ]
       }
     ],
@@ -34,7 +46,10 @@
       {
         "matcher": "",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else printf \"%s\\n\" \"{\\\"systemMessage\\\":\\\"\\\\n\\\\nEntire CLI is enabled but not installed or not on PATH.\\\\nInstallation guide: https://docs.entire.io/cli/installation#installation-methods\\\"}\"; exit 0; fi; fi; exec $E hooks claude-code session-start'"
+          {
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks claude-code session-start"
+          }
         ]
       }
     ],
@@ -42,7 +57,10 @@
       {
         "matcher": "",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks claude-code stop'"
+          {
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks claude-code stop"
+          }
         ]
       }
     ],
@@ -50,7 +68,10 @@
       {
         "matcher": "",
         "hooks": [
-            "command": "sh -c 'if command -v entire >/dev/null 2>&1; then E=entire; else R=$(git rev-parse --show-toplevel 2>/dev/null); if [ -f \"$R/entire.exe\" ]; then E=\"$R/entire.exe\"; elif [ -f \"$R/entire\" ]; then E=\"$R/entire\"; else exit 0; fi; fi; exec $E hooks claude-code user-prompt-submit'"
+          {
+            "type": "command",
+            "command": "C:\\\\Users\\\\bishw\\\\OneDrive\\\\Desktop\\\\eagerminds-bookmarks-task\\\\entire.exe hooks claude-code user-prompt-submit"
+          }
         ]
       }
     ]
