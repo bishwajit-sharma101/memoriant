@@ -1,0 +1,117 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "339f93642b36",
+  "session_id": "58a66375-fed1-4283-a0d7-eba1f837c367",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-09T16:50:47.0712347Z",
+  "branch": "main",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "client/app/[handle]/page.tsx",
+    "client/app/auth/actions.ts",
+    "client/components/auth/auth-theme-provider.tsx",
+    "client/components/auth/signin-form.tsx",
+    "client/components/auth/signup-form.tsx",
+    "client/components/dashboard/dashboard-client.tsx",
+    "client/components/landing/landing-page-client.tsx",
+    "client/middleware.ts",
+    "client/package-lock.json",
+    "client/package.json",
+    "client/utils/supabase/client.ts",
+    "client/utils/supabase/middleware.ts",
+    "client/utils/supabase/server.ts",
+    "supabase/schema.sql"
+  ],
+  "agent": "Gemini CLI",
+  "model": "gemini-3.1-pro-preview",
+  "turn_id": "f35eb506c70e",
+  "session_metrics": {
+    "turn_count": 6
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-09T16:50:46.6333572Z",
+    "agent_lines": 293,
+    "agent_removed": 164,
+    "human_added": 2,
+    "human_modified": 366,
+    "human_removed": 0,
+    "total_committed": 653,
+    "total_lines_changed": 825,
+    "agent_percentage": 55.3939393939394,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 147,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".env.local": 2,
+        "DON'T READ.txt": 1,
+        "package-lock.json": 138,
+        "package.json": 6
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 781,
+      "agent_lines_removed": 166
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 2,
+      "user_lines_removed": 1,
+      "agent_lines_added": 804,
+      "agent_lines_removed": 168,
+      "user_added_per_file": {
+        "client/app/[handle]/page.tsx": 2
+      },
+      "user_removed_per_file": {
+        "client/app/[handle]/page.tsx": 1
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 2,
+      "user_lines_removed": 1,
+      "agent_lines_added": 804,
+      "agent_lines_removed": 168,
+      "user_added_per_file": {
+        "client/app/[handle]/page.tsx": 2
+      },
+      "user_removed_per_file": {
+        "client/app/[handle]/page.tsx": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 2,
+      "user_lines_removed": 1,
+      "agent_lines_added": 804,
+      "agent_lines_removed": 168,
+      "user_added_per_file": {
+        "client/app/[handle]/page.tsx": 2
+      },
+      "user_removed_per_file": {
+        "client/app/[handle]/page.tsx": 1
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 2,
+      "user_lines_removed": 1,
+      "agent_lines_added": 804,
+      "agent_lines_removed": 168,
+      "user_added_per_file": {
+        "client/app/[handle]/page.tsx": 2
+      },
+      "user_removed_per_file": {
+        "client/app/[handle]/page.tsx": 1
+      }
+    }
+  ]
+}
