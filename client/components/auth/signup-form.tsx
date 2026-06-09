@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { signup } from "@/app/auth/actions";
 
 export const SignUpForm: React.FC = () => {
   const router = useRouter();
@@ -16,16 +17,14 @@ export const SignUpForm: React.FC = () => {
     name?: string;
     email?: string;
     password?: string;
+    server?: string;
   }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [authSuccess, setAuthSuccess] = useState(false);
 
   useEffect(() => {
     if (authSuccess) {
-      const timer = setTimeout(() => {
-        router.push("/dashboard");
-      }, 1000);
-      return () => clearTimeout(timer);
+      // The server action handles redirect
     }
   }, [authSuccess, router]);
 
@@ -42,9 +41,22 @@ export const SignUpForm: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setAuthSuccess(true);
-    setIsLoading(false);
+    setErrors({});
+    
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+
+    const result = await signup(formData);
+    
+    if (result?.error) {
+      setErrors({ server: result.error });
+      setIsLoading(false);
+    } else {
+      setAuthSuccess(true);
+      // Server action will redirect
+    }
   };
 
   if (authSuccess) {
@@ -63,6 +75,11 @@ export const SignUpForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
+      {errors.server && (
+        <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md">
+          {errors.server}
+        </div>
+      )}
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[200ms] fill-mode-both">
         <Input
           label="Full Name"
@@ -70,6 +87,7 @@ export const SignUpForm: React.FC = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={errors.name}
+          disabled={isLoading}
         />
       </div>
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[400ms] fill-mode-both mt-2">
@@ -80,6 +98,7 @@ export const SignUpForm: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
+          disabled={isLoading}
         />
       </div>
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[600ms] fill-mode-both mt-2">
@@ -90,6 +109,7 @@ export const SignUpForm: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
+          disabled={isLoading}
           rightElement={
             <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-[10px] font-bold text-stone-400 uppercase tracking-widest hover:text-stone-900 transition-colors">
               {showPassword ? "Hide" : "Show"}
@@ -99,8 +119,8 @@ export const SignUpForm: React.FC = () => {
       </div>
 
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[800ms] fill-mode-both mt-6">
-        <Button type="submit" className="w-full">
-          Create Account
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? "Creating..." : "Create Account"}
         </Button>
       </div>
 

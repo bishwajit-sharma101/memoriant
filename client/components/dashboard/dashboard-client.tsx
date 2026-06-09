@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+import { logout } from "@/app/auth/actions";
 
 interface Bookmark {
   id: string;
@@ -13,56 +15,22 @@ interface Bookmark {
   createdAt: string;
 }
 
-const DEFAULT_BOOKMARKS: Bookmark[] = [
-  {
-    id: "1",
-    title: "Next.js 16 App Directory docs",
-    url: "https://nextjs.org/docs",
-    tag: "nextjs",
-    notes: "Official routing, layouts, and page conventions documentation. Crucial guide.",
-    isPublic: true,
-    createdAt: "2026-06-05",
-  },
-  {
-    id: "2",
-    title: "Figma Design System UI Kits",
-    url: "https://figma.com/file/premium-kit",
-    tag: "design",
-    notes: "Premium asset packages, typography scaling guidelines, and grid layouts.",
-    isPublic: false,
-    createdAt: "2026-06-06",
-  },
-  {
-    id: "3",
-    title: "Introduction to Agentic Assistants",
-    url: "https://deepmind.google/ai-agents",
-    tag: "ai",
-    notes: "Google DeepMind research paper detailing advanced paired programming agents.",
-    isPublic: true,
-    createdAt: "2026-06-07",
-  },
-  {
-    id: "4",
-    title: "Tailwind CSS v4 Roadmap Specs",
-    url: "https://tailwindcss.com/specs",
-    tag: "framework",
-    notes: "Upgraded theme configurations, inline configurations, and custom keyframes.",
-    isPublic: false,
-    createdAt: "2026-06-07",
-  },
-  {
-    id: "5",
-    title: "Vite + React Bundler Optimization",
-    url: "https://vite.dev/guide",
-    tag: "framework",
-    notes: "Guidelines for speeding up dev server HMR reload cycles.",
-    isPublic: false,
-    createdAt: "2026-06-08",
-  },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapBookmark = (db: any): Bookmark => ({
+  id: db.id,
+  title: db.title,
+  url: db.url,
+  tag: db.tag || "inbox",
+  notes: db.notes || "",
+  isPublic: db.is_public,
+  createdAt: new Date(db.created_at).toISOString().split("T")[0],
+});
 
 export const DashboardClient: React.FC = () => {
-  const router = useRouter();
+  const [supabase] = useState(() => createClient());
+
+  // User Profile
+  const [userProfile, setUserProfile] = useState<{ handle: string; full_name: string } | null>(null);
 
   // Core Bookmarks Database
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
@@ -92,26 +60,29 @@ export const DashboardClient: React.FC = () => {
   // DOM Refs
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize from LocalStorage or Defaults
+  // Fetch from Supabase on Mount
   useEffect(() => {
-    const saved = localStorage.getItem("em_bookmarks");
-    if (saved) {
-      try {
-        setBookmarks(JSON.parse(saved));
-      } catch (e) {
-        setBookmarks(DEFAULT_BOOKMARKS);
-      }
-    } else {
-      setBookmarks(DEFAULT_BOOKMARKS);
-      localStorage.setItem("em_bookmarks", JSON.stringify(DEFAULT_BOOKMARKS));
-    }
-  }, []);
+    const fetchInitialData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .maybeSingle();
+        if (profile) setUserProfile(profile);
 
-  // Save changes helper
-  const saveBookmarks = (updated: Bookmark[]) => {
-    setBookmarks(updated);
-    localStorage.setItem("em_bookmarks", JSON.stringify(updated));
-  };
+        const { data: bms } = await supabase
+          .from("bookmarks")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (bms) {
+          setBookmarks(bms.map(mapBookmark));
+        }
+      }
+    };
+    fetchInitialData();
+  }, [supabase]);
 
   // Toast notifier helper
   const triggerToast = (msg: string) => {
@@ -126,6 +97,7 @@ export const DashboardClient: React.FC = () => {
   useEffect(() => {
     const urlLower = newUrl.toLowerCase();
     if (!urlLower) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSuggestedTags([]);
       return;
     }
@@ -147,6 +119,25 @@ export const DashboardClient: React.FC = () => {
     }
     setSuggestedTags(tags);
   }, [newUrl]);
+
+  // Filtering Logic
+  const filteredBookmarks = bookmarks.filter((b) => {
+    const query = searchQuery.toLowerCase();
+    const matchesSearch =
+      b.title.toLowerCase().includes(query) ||
+      b.url.toLowerCase().includes(query) ||
+      b.tag.toLowerCase().includes(query) ||
+      b.notes.toLowerCase().includes(query);
+
+    const matchesTag = selectedTag ? b.tag.toLowerCase() === selectedTag.toLowerCase() : true;
+
+    return matchesSearch && matchesTag;
+  });
+
+  // Calculate unique tags for selector
+  const uniqueTags = Array.from(new Set(bookmarks.map((b) => b.tag.toLowerCase()))).filter(Boolean);
+
+  const selectedBookmark = bookmarks.find((b) => b.id === selectedCardId);
 
   // Keyboard Shortcuts Hook
   useEffect(() => {
@@ -218,43 +209,52 @@ export const DashboardClient: React.FC = () => {
   });
 
   // Action: Toggle Public Bio-Link Status
-  const handleTogglePublic = (id: string, e: React.MouseEvent) => {
+  const handleTogglePublic = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Avoid opening drawer
-    const updated = bookmarks.map((b) => {
-      if (b.id === id) {
-        const nextState = !b.isPublic;
-        triggerToast(
-          nextState
-            ? "✨ Bookmark added to public Bio Link profile"
-            : "🔒 Bookmark removed from public Bio Link"
-        );
-        return { ...b, isPublic: nextState };
-      }
-      return b;
-    });
-    saveBookmarks(updated);
+    const target = bookmarks.find(b => b.id === id);
+    if (!target) return;
+    const nextState = !target.isPublic;
+    
+    // Optimistic UI update
+    setBookmarks(prev => prev.map(b => b.id === id ? { ...b, isPublic: nextState } : b));
+    triggerToast(
+      nextState
+        ? "✨ Bookmark added to public Bio Link profile"
+        : "🔒 Bookmark removed from public Bio Link"
+    );
+
+    // Backend sync
+    await supabase.from("bookmarks").update({ is_public: nextState }).eq("id", id);
   };
 
   // Action: Add Bookmark
-  const handleAddBookmark = (e: React.FormEvent) => {
+  const handleAddBookmark = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUrl || !newTitle) {
       triggerToast("⚠️ Please fill in Title and URL");
       return;
     }
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
     const cleanUrl = newUrl.startsWith("http") ? newUrl : `https://${newUrl}`;
-    const newBookmark: Bookmark = {
-      id: Date.now().toString(),
+    
+    const { data, error } = await supabase.from("bookmarks").insert({
+      user_id: user.id,
       title: newTitle,
       url: cleanUrl,
       tag: newTag || "inbox",
       notes: newNotes || "",
-      isPublic: false,
-      createdAt: new Date().toISOString().split("T")[0],
-    };
+      is_public: false,
+    }).select().maybeSingle();
 
-    const updated = [newBookmark, ...bookmarks];
-    saveBookmarks(updated);
+    if (error || !data) {
+      triggerToast("❌ Failed to add bookmark");
+      return;
+    }
+
+    const newBookmark = mapBookmark(data);
+    setBookmarks([newBookmark, ...bookmarks]);
     setIsAddModalOpen(false);
 
     // Reset Form
@@ -270,52 +270,40 @@ export const DashboardClient: React.FC = () => {
   };
 
   // Action: Delete Bookmark
-  const handleDeleteBookmark = (id: string) => {
-    const updated = bookmarks.filter((b) => b.id !== id);
-    saveBookmarks(updated);
+  const handleDeleteBookmark = async (id: string) => {
+    // Optimistic update
+    setBookmarks(prev => prev.filter(b => b.id !== id));
     setIsDrawerOpen(false);
     setSelectedCardId(null);
     setKeyboardIndex(-1);
     triggerToast("🗑️ Bookmark deleted");
+
+    // Backend sync
+    await supabase.from("bookmarks").delete().eq("id", id);
   };
 
   // Action: Save Inspector Drawer Changes
-  const handleUpdateBookmark = (id: string, updates: Partial<Bookmark>) => {
-    const updated = bookmarks.map((b) => {
-      if (b.id === id) {
-        return { ...b, ...updates };
-      }
-      return b;
-    });
-    setBookmarks(updated); // Sync local state quickly
-    localStorage.setItem("em_bookmarks", JSON.stringify(updated));
+  const handleUpdateBookmark = async (id: string, updates: Partial<Bookmark>) => {
+    // Optimistic update
+    setBookmarks(prev => prev.map((b) => b.id === id ? { ...b, ...updates } : b));
+
+    // Map UI updates to DB schema
+    const dbUpdates: Record<string, unknown> = {};
+    if (updates.title !== undefined) dbUpdates.title = updates.title;
+    if (updates.url !== undefined) dbUpdates.url = updates.url;
+    if (updates.tag !== undefined) dbUpdates.tag = updates.tag;
+    if (updates.notes !== undefined) dbUpdates.notes = updates.notes;
+    if (updates.isPublic !== undefined) dbUpdates.is_public = updates.isPublic;
+
+    if (Object.keys(dbUpdates).length > 0) {
+      await supabase.from("bookmarks").update(dbUpdates).eq("id", id);
+    }
   };
 
-  // Filtering Logic
-  const filteredBookmarks = bookmarks.filter((b) => {
-    const query = searchQuery.toLowerCase();
-    const matchesSearch =
-      b.title.toLowerCase().includes(query) ||
-      b.url.toLowerCase().includes(query) ||
-      b.tag.toLowerCase().includes(query) ||
-      b.notes.toLowerCase().includes(query);
-
-    const matchesTag = selectedTag ? b.tag.toLowerCase() === selectedTag.toLowerCase() : true;
-
-    return matchesSearch && matchesTag;
-  });
-
-  // Calculate unique tags for selector
-  const uniqueTags = Array.from(new Set(bookmarks.map((b) => b.tag.toLowerCase()))).filter(Boolean);
-
-  const selectedBookmark = bookmarks.find((b) => b.id === selectedCardId);
-
   // Sign out helper
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     triggerToast("Logging out...");
-    setTimeout(() => {
-      router.push("/");
-    }, 600);
+    await logout();
   };
 
   return (
@@ -598,7 +586,7 @@ export const DashboardClient: React.FC = () => {
                         <label className="text-[9px] font-black uppercase tracking-widest text-stone-400">Bio Username</label>
                         <input
                           type="text"
-                          defaultValue="@eagerminds"
+                          value={userProfile?.handle ? `@${userProfile.handle}` : "@eagerminds"}
                           disabled
                           className="w-full mt-1.5 px-4 py-2 border border-stone-200 bg-stone-50 text-xs font-semibold rounded-xl text-stone-450 focus:outline-none"
                         />
@@ -678,7 +666,7 @@ export const DashboardClient: React.FC = () => {
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                       </svg>
-                      eagerminds.bio
+                      {userProfile?.handle ? `${userProfile.handle}.bio` : "eagerminds.bio"}
                     </div>
                   </div>
                 </div>

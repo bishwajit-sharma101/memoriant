@@ -124,6 +124,7 @@ export const LandingPageClient: React.FC = () => {
   useEffect(() => {
     const urlLower = tagInput.toLowerCase();
     if (!urlLower) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDetectedTags([]);
       return;
     }
@@ -146,6 +147,7 @@ export const LandingPageClient: React.FC = () => {
   // Step 2 Tags simulated mount
   useEffect(() => {
     if (activeStep === 2) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSimStep2Tags([]);
       const t1 = setTimeout(() => setSimStep2Tags(["#code"]), 400);
       const t2 = setTimeout(() => setSimStep2Tags(["#code", "#framework"]), 800);

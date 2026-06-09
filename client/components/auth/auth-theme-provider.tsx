@@ -139,6 +139,7 @@ export const AuthThemeProvider: React.FC<AuthThemeProviderProps> = ({ children }
 
   // Initialize theme from localStorage on client mount
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const savedThemeId = localStorage.getItem("em-auth-theme");
     if (savedThemeId) {

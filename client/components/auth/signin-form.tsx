@@ -5,26 +5,25 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { login } from "@/app/auth/actions";
 
 export const SignInForm: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; server?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [authSuccess, setAuthSuccess] = useState(false);
 
   useEffect(() => {
     if (authSuccess) {
-      const timer = setTimeout(() => {
-        router.push("/dashboard");
-      }, 1000);
-      return () => clearTimeout(timer);
+      // The server action handles redirect, but just in case we have local UI transition:
+      // Actually we won't hit this timeout if redirect happens, but it's fine.
     }
   }, [authSuccess, router]);
 
   const validate = () => {
-    const newErrors: { email?: string; password?: string } = {};
+    const newErrors: { email?: string; password?: string; server?: string } = {};
     if (!email) newErrors.email = "Required";
     if (!password) newErrors.password = "Required";
     setErrors(newErrors);
@@ -35,9 +34,21 @@ export const SignInForm: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setAuthSuccess(true);
-    setIsLoading(false);
+    setErrors({});
+    
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+
+    const result = await login(formData);
+    
+    if (result?.error) {
+      setErrors({ server: result.error });
+      setIsLoading(false);
+    } else {
+      setAuthSuccess(true);
+      // Let the Server Action redirect
+    }
   };
 
   if (authSuccess) {
@@ -56,6 +67,11 @@ export const SignInForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
+      {errors.server && (
+        <div className="p-3 text-sm text-red-500 bg-red-50 border border-red-200 rounded-md">
+          {errors.server}
+        </div>
+      )}
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[200ms] fill-mode-both">
         <Input
           label="Email Address"
@@ -64,6 +80,7 @@ export const SignInForm: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
+          disabled={isLoading}
         />
       </div>
 
@@ -75,6 +92,7 @@ export const SignInForm: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
+          disabled={isLoading}
           rightElement={
             <a href="#" className="text-[10px] font-bold text-stone-400 uppercase tracking-widest hover:text-stone-900 transition-colors">
               Forgot?
@@ -84,8 +102,8 @@ export const SignInForm: React.FC = () => {
       </div>
 
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[600ms] fill-mode-both mt-6">
-        <Button type="submit" className="w-full">
-          Sign In
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? "Signing In..." : "Sign In"}
         </Button>
       </div>
 
