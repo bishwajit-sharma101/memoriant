@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "1f11212ba755",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "client/app/globals.css",
+    "client/app/page.tsx",
+    "client/components/dashboard/dashboard-client.tsx",
+    "client/components/landing/landing-page-client.tsx",
+    "client/middleware.ts",
+    "client/next.config.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/1f/11212ba755/0/metadata.json",
+      "transcript": "/1f/11212ba755/0/full.jsonl",
+      "content_hash": "/1f/11212ba755/0/content_hash.txt",
+      "prompt": "/1f/11212ba755/0/prompt.txt"
+    }
+  ]
+}

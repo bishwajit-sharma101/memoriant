@@ -1,0 +1,1 @@
+okk,,lets fix a new problem which is when i'm already logged in already and i goto the landing page the navbar still shows the get started button and signin which is what we don't want , we want to show the profile or maybe a buttong saying goto dashboard or something , fix this
