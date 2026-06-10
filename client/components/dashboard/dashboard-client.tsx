@@ -34,7 +34,9 @@ export const DashboardClient: React.FC = () => {
 
   // Core Bookmarks Database
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"vault" | "bio" | "tags" | "settings">("vault");
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
@@ -63,22 +65,26 @@ export const DashboardClient: React.FC = () => {
   // Fetch from Supabase on Mount
   useEffect(() => {
     const fetchInitialData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", user.id)
-          .maybeSingle();
-        if (profile) setUserProfile(profile);
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .maybeSingle();
+          if (profile) setUserProfile(profile);
 
-        const { data: bms } = await supabase
-          .from("bookmarks")
-          .select("*")
-          .order("created_at", { ascending: false });
-        if (bms) {
-          setBookmarks(bms.map(mapBookmark));
+          const { data: bms } = await supabase
+            .from("bookmarks")
+            .select("*")
+            .order("created_at", { ascending: false });
+          if (bms) {
+            setBookmarks(bms.map(mapBookmark));
+          }
         }
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchInitialData();
@@ -473,12 +479,37 @@ export const DashboardClient: React.FC = () => {
                     {selectedTag ? `#${selectedTag}` : "All References"}
                   </h1>
                   <span className="text-[8px] font-bold text-stone-400 uppercase tracking-widest mt-1">
-                    Showing {filteredBookmarks.length} item{filteredBookmarks.length === 1 ? "" : "s"}
+                    {isLoading ? "Loading..." : `Showing ${filteredBookmarks.length} item${filteredBookmarks.length === 1 ? "" : "s"}`}
                   </span>
                 </div>
               </div>
 
-              {filteredBookmarks.length === 0 ? (
+              {isLoading ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <div
+                      key={i}
+                      className="rounded-2xl border border-stone-200/60 bg-white p-5 h-[180px] flex flex-col justify-between animate-pulse"
+                    >
+                      <div>
+                        <div className="flex justify-between items-center mb-3">
+                          <div className="h-3 w-20 bg-stone-100 rounded"></div>
+                          <div className="h-2 w-12 bg-stone-100 rounded"></div>
+                        </div>
+                        <div className="h-4 w-3/4 bg-stone-200/60 rounded mb-2.5"></div>
+                        <div className="h-3 w-1/2 bg-stone-100 rounded"></div>
+                      </div>
+                      <div className="flex items-center justify-between mt-4 border-t border-stone-100 pt-3.5">
+                        <div className="h-5 w-16 bg-stone-100 rounded-full"></div>
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 w-12 bg-stone-100 rounded"></div>
+                          <div className="h-4.5 w-8 bg-stone-100 rounded-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : filteredBookmarks.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 border-2 border-dashed border-stone-200 rounded-3xl bg-white/25">
                   <span className="text-stone-400 text-xs font-semibold italic">No links found matching filter query</span>
                 </div>
