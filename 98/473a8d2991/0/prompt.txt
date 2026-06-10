@@ -1,0 +1,1 @@
+let fix the next part which is when i goto the the dashboard for a sec it stays empty as data arrives at like 1 sec later so add a loading animation so after it arrives we show them
