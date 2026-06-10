@@ -30,7 +30,11 @@ create table bookmarks (
   tag text default 'inbox',
   notes text default '',
   is_public boolean default false,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+
+  constraint title_length check (char_length(trim(title)) > 0 and char_length(title) <= 100),
+  constraint url_not_empty check (char_length(trim(url)) > 0),
+  constraint url_protocol check (url like 'http://%' or url like 'https://%')
 );
 
 -- Set up Row Level Security (RLS) for bookmarks

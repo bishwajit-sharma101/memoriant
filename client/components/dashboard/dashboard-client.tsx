@@ -26,6 +26,21 @@ const mapBookmark = (db: any): Bookmark => ({
   createdAt: new Date(db.created_at).toISOString().split("T")[0],
 });
 
+const isValidUrl = (url: string) => {
+  try {
+    if (url.length > 2048) return false;
+    const parsed = new URL(url);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return false;
+    
+    // Require valid domain structure (at least one dot, valid TLD length >= 2)
+    // Rejects 'localhost', 'abc', etc.
+    const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+    return domainRegex.test(parsed.hostname);
+  } catch {
+    return false;
+  }
+};
+
 export const DashboardClient: React.FC = () => {
   const [supabase] = useState(() => createClient());
 
@@ -237,18 +252,28 @@ export const DashboardClient: React.FC = () => {
   // Action: Add Bookmark
   const handleAddBookmark = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newUrl || !newTitle) {
+    const cleanTitle = newTitle.trim();
+    if (!cleanTitle || !newUrl.trim()) {
       triggerToast("⚠️ Please fill in Title and URL");
       return;
     }
+    if (cleanTitle.length > 100) {
+      triggerToast("⚠️ Title must be 100 characters or less");
+      return;
+    }
+
+    const cleanUrl = newUrl.trim().startsWith("http") ? newUrl.trim() : `https://${newUrl.trim()}`;
+    if (!isValidUrl(cleanUrl)) {
+      triggerToast("⚠️ Please enter a valid URL");
+      return;
+    }
+
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-
-    const cleanUrl = newUrl.startsWith("http") ? newUrl : `https://${newUrl}`;
     
     const { data, error } = await supabase.from("bookmarks").insert({
       user_id: user.id,
-      title: newTitle,
+      title: cleanTitle,
       url: cleanUrl,
       tag: newTag || "inbox",
       notes: newNotes || "",
@@ -291,6 +316,34 @@ export const DashboardClient: React.FC = () => {
 
   // Action: Save Inspector Drawer Changes
   const handleUpdateBookmark = async (id: string, updates: Partial<Bookmark>) => {
+    // Validate title and URL if they are being updated
+    if (updates.title !== undefined) {
+      const trimmedTitle = updates.title.trim();
+      if (!trimmedTitle) {
+        triggerToast("⚠️ Title cannot be empty");
+        return;
+      }
+      if (trimmedTitle.length > 100) {
+        triggerToast("⚠️ Title must be 100 characters or less");
+        return;
+      }
+      updates.title = trimmedTitle;
+    }
+
+    if (updates.url !== undefined) {
+      const trimmedUrl = updates.url.trim();
+      if (!trimmedUrl) {
+        triggerToast("⚠️ URL cannot be empty");
+        return;
+      }
+      const cleanUrl = trimmedUrl.startsWith("http") ? trimmedUrl : `https://${trimmedUrl}`;
+      if (!isValidUrl(cleanUrl)) {
+        triggerToast("⚠️ Please enter a valid URL");
+        return;
+      }
+      updates.url = cleanUrl;
+    }
+
     // Optimistic update
     setBookmarks(prev => prev.map((b) => b.id === id ? { ...b, ...updates } : b));
 
@@ -737,8 +790,13 @@ export const DashboardClient: React.FC = () => {
                   <label className="text-[9px] font-black uppercase tracking-widest text-stone-400">Resource Title</label>
                   <input
                     type="text"
-                    value={selectedBookmark.title}
-                    onChange={(e) => handleUpdateBookmark(selectedBookmark.id, { title: e.target.value })}
+                    defaultValue={selectedBookmark.title}
+                    key={`title-${selectedBookmark.id}`}
+                    onBlur={(e) => {
+                      if (e.target.value !== selectedBookmark.title) {
+                        handleUpdateBookmark(selectedBookmark.id, { title: e.target.value });
+                      }
+                    }}
                     className="w-full mt-1.5 px-3 py-2 border border-stone-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-stone-900 text-stone-850"
                   />
                 </div>
@@ -749,8 +807,13 @@ export const DashboardClient: React.FC = () => {
                   <div className="flex gap-2 mt-1.5">
                     <input
                       type="text"
-                      value={selectedBookmark.url}
-                      onChange={(e) => handleUpdateBookmark(selectedBookmark.id, { url: e.target.value })}
+                      defaultValue={selectedBookmark.url}
+                      key={`url-${selectedBookmark.id}`}
+                      onBlur={(e) => {
+                        if (e.target.value !== selectedBookmark.url) {
+                          handleUpdateBookmark(selectedBookmark.id, { url: e.target.value });
+                        }
+                      }}
                       className="w-full px-3 py-2 border border-stone-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-stone-900 text-stone-850"
                     />
                     <a
@@ -771,8 +834,13 @@ export const DashboardClient: React.FC = () => {
                   <label className="text-[9px] font-black uppercase tracking-widest text-stone-400">Vault Tag</label>
                   <input
                     type="text"
-                    value={selectedBookmark.tag}
-                    onChange={(e) => handleUpdateBookmark(selectedBookmark.id, { tag: e.target.value.toLowerCase() })}
+                    defaultValue={selectedBookmark.tag}
+                    key={`tag-${selectedBookmark.id}`}
+                    onBlur={(e) => {
+                      if (e.target.value.toLowerCase() !== selectedBookmark.tag) {
+                        handleUpdateBookmark(selectedBookmark.id, { tag: e.target.value.toLowerCase() });
+                      }
+                    }}
                     className="w-full mt-1.5 px-3 py-2 border border-stone-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-stone-900 text-stone-850 lowercase"
                   />
                 </div>
@@ -782,8 +850,13 @@ export const DashboardClient: React.FC = () => {
                   <label className="text-[9px] font-black uppercase tracking-widest text-stone-400">Personal Reference Notes</label>
                   <textarea
                     rows={4}
-                    value={selectedBookmark.notes}
-                    onChange={(e) => handleUpdateBookmark(selectedBookmark.id, { notes: e.target.value })}
+                    defaultValue={selectedBookmark.notes}
+                    key={`notes-${selectedBookmark.id}`}
+                    onBlur={(e) => {
+                      if (e.target.value !== selectedBookmark.notes) {
+                        handleUpdateBookmark(selectedBookmark.id, { notes: e.target.value });
+                      }
+                    }}
                     className="w-full mt-1.5 px-3 py-2.5 border border-stone-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-stone-900 text-stone-850 resize-none leading-relaxed"
                     placeholder="Write a custom description, highlights, or search keywords here..."
                   />

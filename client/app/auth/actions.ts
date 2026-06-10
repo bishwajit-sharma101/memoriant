@@ -38,7 +38,7 @@ export async function signup(formData: FormData) {
 
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -50,6 +50,10 @@ export async function signup(formData: FormData) {
 
   if (error) {
     return { error: error.message }
+  }
+
+  if (data?.user?.identities && data.user.identities.length === 0) {
+    return { error: 'An account with this email already exists. Please sign in instead.' }
   }
 
   redirect('/verify-email')
