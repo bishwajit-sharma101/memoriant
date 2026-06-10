@@ -94,6 +94,78 @@ body {
   animation: char-fade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ═══════════════════════════════════════════════
+   Cinematic Luxury Typographic Loader (No Lines)
+   ═══════════════════════════════════════════════ */
+
+@keyframes cinematic-reveal {
+  0% {
+    opacity: 0;
+    filter: blur(16px);
+    letter-spacing: 0.6em;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    letter-spacing: 0.35em;
+    transform: scale(1);
+  }
+}
+
+@keyframes cinematic-tagline {
+  0% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes cinematic-ambient {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  50% {
+    opacity: 0.45;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}
+
+@keyframes loader-fade-out {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(12px);
+    visibility: hidden;
+  }
+}
+
+.loader-exit {
+  animation: loader-fade-out 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-cinematic-title {
+  animation: cinematic-reveal 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-cinematic-tagline {
+  opacity: 0;
+  animation: cinematic-tagline 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.loader-ambient-glow {
+  animation: cinematic-ambient 6s ease-in-out infinite;
+}
+
 .reveal-on-scroll {
   opacity: 0;
   transform: translateY(40px);

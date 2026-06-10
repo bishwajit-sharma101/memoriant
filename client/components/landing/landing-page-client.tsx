@@ -9,12 +9,21 @@ interface MockBookmark {
   tag: string;
 }
 
-export const LandingPageClient: React.FC = () => {
+export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLoggedIn }) => {
   const router = useRouter();
   
   // Loader states
   const [isLoading, setIsLoading] = useState(true);
+  const [loaderExiting, setLoaderExiting] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
+  const [loaderPhase, setLoaderPhase] = useState(0); // 0=brand, 1=status, 2=ready
+  const [statusIndex, setStatusIndex] = useState(0);
+  const LOADER_STATUS_LINES = [
+    "01 // SECURING ENVIRONMENT",
+    "02 // RETRIEVING DIGITAL MEMORIES",
+    "03 // CALIBRATING KNOWLEDGE INDEX",
+    "04 // RENDERING INTERFACE",
+  ];
 
   // Transition exit state
   const [isExiting, setIsExiting] = useState(false);
@@ -49,21 +58,55 @@ export const LandingPageClient: React.FC = () => {
     { title: "Advanced CSS Variables", url: "css-tricks.com/vars", tag: "design" },
   ];
 
-  // Loader count loop
+  // Phased loader orchestration
   useEffect(() => {
-    const interval = setInterval(() => {
+    // Phase 0: Brand reveal (first 400ms handled by CSS animation delays)
+    const phaseTimer1 = setTimeout(() => setLoaderPhase(1), 500);
+
+    // Phase 1: Progress bar + cycling status text
+    const progressInterval = setInterval(() => {
       setLoadProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 350);
+          clearInterval(progressInterval);
           return 100;
+        }
+        // Ease-out curve: fast start, slow finish
+        const remaining = 100 - prev;
+        const step = Math.max(0.5, remaining * 0.06);
+        return Math.min(100, prev + step);
+      });
+    }, 20);
+
+    // Cycle status text every 450ms
+    const statusInterval = setInterval(() => {
+      setStatusIndex((prev) => {
+        if (prev >= 3) {
+          clearInterval(statusInterval);
+          return 3;
         }
         return prev + 1;
       });
-    }, 12);
-    return () => clearInterval(interval);
+    }, 450);
+
+    // Phase 2: Ready state
+    const phaseTimer2 = setTimeout(() => {
+      setLoaderPhase(2);
+      setLoadProgress(100);
+    }, 2200);
+
+    // Exit: curtain-up animation, then hide
+    const exitTimer = setTimeout(() => {
+      setLoaderExiting(true);
+      setTimeout(() => setIsLoading(false), 800);
+    }, 2800);
+
+    return () => {
+      clearTimeout(phaseTimer1);
+      clearInterval(progressInterval);
+      clearInterval(statusInterval);
+      clearTimeout(phaseTimer2);
+      clearTimeout(exitTimer);
+    };
   }, []);
 
   // Intersection Observer for scroll reveals
@@ -177,34 +220,55 @@ export const LandingPageClient: React.FC = () => {
     const lower = searchQuery.toLowerCase();
     return b.title.toLowerCase().includes(lower) || b.tag.toLowerCase().includes(lower);
   });
-
   return (
     <>
-      {/* Fullscreen Monospace Percentage Loader */}
-      <div
-        className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#FAF8F5] transition-all duration-700 ease-in-out ${
-          isLoading ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="flex flex-col items-center justify-center">
-          {/* Subtle spinning indicator with progress nested */}
-          <div className="relative flex items-center justify-center mb-6">
-            <div className="h-12 w-12 rounded-full border border-stone-200 border-t-stone-900 animate-spin duration-1000" />
-            <div className="absolute font-mono text-[9px] font-bold text-stone-900">
-              {loadProgress.toString().padStart(2, "0")}
+      {/* ═══ Cinematic Luxury Typographic Loader ═══ */}
+      {isLoading && (
+        <div
+          className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#090908] overflow-hidden ${
+            loaderExiting ? "loader-exit" : ""
+          }`}
+        >
+          {/* Breathing ambient champagne glow */}
+          <div 
+            className="absolute top-1/2 left-1/2 w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(217,195,176,0.05)_0%,transparent_70%)] pointer-events-none loader-ambient-glow" 
+            style={{ transform: "translate(-50%, -50%)" }}
+          />
+
+          <div className="relative flex flex-col items-center justify-center gap-10 text-center max-w-2xl px-6 select-none">
+            
+            {/* Minimal solid icon silhouette */}
+            <div 
+              className="animate-cinematic-tagline flex items-center justify-center h-16 w-16 rounded-full overflow-hidden bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+              style={{ animationDelay: "0.2s" }}
+            >
+              <img 
+                src="/logo.png" 
+                alt="EagerMinds Logo" 
+                className="h-full w-full object-cover" 
+              />
             </div>
+
+            {/* Brand Title with Cinematic Letter Expansion & Blur Reveal */}
+            <div className="flex flex-col items-center gap-6">
+              <h1 
+                className="animate-cinematic-title text-4xl sm:text-6xl md:text-7xl font-extralight text-stone-100 tracking-[0.35em] uppercase leading-none"
+              >
+                EagerMinds
+              </h1>
+
+              {/* Tiny minimal percentage loader */}
+              <span 
+                className="animate-cinematic-tagline text-[10px] font-mono text-stone-500 tracking-[0.25em] tabular-nums"
+                style={{ animationDelay: "0.6s" }}
+              >
+                {Math.round(loadProgress)}%
+              </span>
+            </div>
+
           </div>
-
-          {/* Sleek lowercase/uppercase thin tracking header */}
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-stone-900 mb-1.5">
-            EAGERMINDS
-          </span>
-
-          <span className="text-[8px] font-mono text-stone-400 uppercase tracking-widest">
-            Initializing workspace...
-          </span>
         </div>
-      </div>
+      )}
 
       {/* Main page layout */}
       <div
@@ -218,10 +282,8 @@ export const LandingPageClient: React.FC = () => {
         <header className="sticky top-0 z-40 w-full border-b border-stone-200/40 bg-[#FAF8F5]/60 backdrop-blur-md animate-in fade-in duration-1000">
           <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-stone-900 text-white shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="h-5 w-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-                </svg>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden bg-stone-900 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
+                <img src="/logo.png" alt="EagerMinds Logo" className="h-full w-full object-cover" />
               </div>
               <span className="text-sm font-black uppercase tracking-[0.2em] text-stone-900">
                 EagerMinds
@@ -235,18 +297,29 @@ export const LandingPageClient: React.FC = () => {
             </nav>
 
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => handleNavigate("/signin")}
-                className="rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-stone-500 hover:bg-stone-100/50 hover:text-stone-900 transition-all cursor-pointer"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => handleNavigate("/signup")}
-                className="rounded-full bg-stone-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
-              >
-                Get Started
-              </button>
+              {isLoggedIn ? (
+                <button
+                  onClick={() => handleNavigate("/dashboard")}
+                  className="rounded-full bg-stone-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+                >
+                  Go to Dashboard
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => handleNavigate("/signin")}
+                    className="rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-stone-500 hover:bg-stone-100/50 hover:text-stone-900 transition-all cursor-pointer"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={() => handleNavigate("/signup")}
+                    className="rounded-full bg-stone-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+                  >
+                    Get Started
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </header>
@@ -270,12 +343,21 @@ export const LandingPageClient: React.FC = () => {
               </p>
 
               <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row w-full sm:w-auto">
-                <button
-                  onClick={() => handleNavigate("/signup")}
-                  className="w-full sm:w-auto text-center rounded-full bg-stone-900 px-8 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_50px_-10px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-500 cursor-pointer"
-                >
-                  Start Bookmarking Free
-                </button>
+                {isLoggedIn ? (
+                  <button
+                    onClick={() => handleNavigate("/dashboard")}
+                    className="w-full sm:w-auto text-center rounded-full bg-stone-900 px-8 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_50px_-10px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-500 cursor-pointer"
+                  >
+                    Go to Dashboard
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleNavigate("/signup")}
+                    className="w-full sm:w-auto text-center rounded-full bg-stone-900 px-8 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_50px_-10px_rgba(0,0,0,0.4)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-500 cursor-pointer"
+                  >
+                    Start Bookmarking Free
+                  </button>
+                )}
                 <a
                   href="#workflow"
                   className="w-full sm:w-auto text-center rounded-full border border-stone-200 bg-white/40 backdrop-blur-sm px-8 py-4 text-xs font-bold uppercase tracking-widest text-stone-700 hover:bg-white/80 hover:shadow-md hover:-translate-y-0.5 transition-all duration-500 cursor-pointer"
