@@ -3,9 +3,11 @@
   "checkpoint_id": "a4432fecd33c",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 1,
+  "checkpoints_count": 7,
   "files_touched": [
-    "client/app/auth/actions.ts"
+    "client/app/auth/actions.ts",
+    "client/components/dashboard/dashboard-client.tsx",
+    "supabase/schema.sql"
   ],
   "sessions": [
     {
@@ -13,6 +15,12 @@
       "transcript": "/a4/432fecd33c/0/full.jsonl",
       "content_hash": "/a4/432fecd33c/0/content_hash.txt",
       "prompt": "/a4/432fecd33c/0/prompt.txt"
+    },
+    {
+      "metadata": "/a4/432fecd33c/1/metadata.json",
+      "transcript": "/a4/432fecd33c/1/full.jsonl",
+      "content_hash": "/a4/432fecd33c/1/content_hash.txt",
+      "prompt": "/a4/432fecd33c/1/prompt.txt"
     }
   ]
 }

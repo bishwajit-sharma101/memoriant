@@ -1,0 +1,116 @@
+Let's fix the remaining validation issues before we move on to responsiveness.
+
+1. Duplicate signup email handling:
+
+   * Currently, if a user tries to sign up with an email that already exists, they are redirected to the "Check your inbox" page even though no verification email is sent.
+   * We should detect this case and show a clear error message such as:
+     "An account with this email already exists. Please sign in instead."
+   * Do not redirect to the verification page when signup fails.
+
+2. Bookmark title validation:
+
+   * Add both frontend and backend validation.
+   * Enforce a reasonable maximum length (suggest 100 characters).
+   * Reject empty or whitespace-only titles.
+   * Display a user-friendly validation message.
+
+3. Bookmark URL validation:
+
+   * Currently any text such as "abc" can be saved as a URL.
+   * Require a valid URL format before allowing bookmark creation or updates.
+   * Reject empty or whitespace-only URLs.
+   * Show a clear validation error to the user.
+   * Apply validation both client-side and server-side.
+
+4. Please audit the existing bookmark create/update flow and identify any other missing input validation that could cause bad or malformed data to enter the database.
+
+Before making changes, explain the exact files that will be modified and the validation approach you plan to implement.
+
+---
+
+I found another validation issue during testing.
+
+Current behavior:
+
+1. I can still edit an existing bookmark and save invalid URLs.
+2. Example: https://abc is accepted and persisted.
+3. Previously created bookmarks containing invalid URLs can still be edited and saved with invalid values.
+4. The favicon service is also attempting to load invalid domains and generating 404 requests.
+
+Please perform a complete audit of all bookmark validation paths.
+
+Check:
+
+* Bookmark creation flow
+* Bookmark edit flow
+* Inspector drawer updates
+* Auto-save/onBlur updates
+* Public/private toggle updates
+* Any direct Supabase update calls
+
+For every path that writes bookmark data, verify that validation is enforced before the database update occurs.
+
+Validation requirements:
+
+* URL must be a valid public URL.
+* Reject values such as:
+
+  * abc
+  * test
+  * hello
+  * zcv
+  * https://abc
+  * https://test
+* Require a real hostname containing a valid domain structure.
+* Reject empty URLs.
+* Reject whitespace-only URLs.
+
+Also audit all other user-input fields and identify any places where validation can be bypassed through editing existing records rather than creating new ones.
+
+Before making changes, explain:
+
+1. Why https://abc is currently being accepted.
+2. Which validation paths are missing.
+3. Exactly which files need modification.
+4. Whether existing invalid database records need cleanup.
+
+---
+
+Implement strict URL validation. Require http:// or https:// and a hostname containing a real domain structure (e.g. github.com, google.com, nextjs.org). Reject values like abc, test, localhost, https://abc, https://test, etc.and the length part
+
+---
+
+Perform a security audit of authentication, authorization, RLS policies, bookmark CRUD operations, public profile routes, and client-side data fetching. Look specifically for data leakage, privilege escalation, IDOR vulnerabilities, XSS vectors, unsafe URL handling, and places where DevTools request modification could allow access to another user's data.
+
+---
+
+Audit all Supabase RLS policies and verify there is no policy combination that allows authenticated users to view public bookmarks through private dashboard queries. Look for policy interactions, not just individual policy correctness.
+
+---
+
+Proceed with the URL security fixes only.
+
+1. Implement stricter URL validation so values such as:
+
+   * abc
+   * test
+   * hello
+   * zcv
+   * https://abc
+   * https://test
+
+   are rejected.
+
+2. Keep support for normal URLs such as:
+
+   * https://google.com
+   * https://github.com
+   * https://nextjs.org
+
+3. Add the database-level URL protocol constraint to prevent javascript:, data:, file:, and similar unsafe schemes from being stored.
+
+4. Before applying any database changes, provide the exact SQL statements that will be executed.
+
+Do not perform any large refactors, RLS changes, authentication changes, or dashboard architecture changes. We are in stabilization and QA mode.
+
+After implementation, provide a list of URL examples that should pass and fail so I can manually verify the behavior.
