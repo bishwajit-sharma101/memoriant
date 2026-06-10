@@ -1,0 +1,21 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "8ba42ce8ee27",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "client/app/auth/actions.ts",
+    "client/app/auth/confirm/route.ts",
+    "client/app/verify-email/page.tsx",
+    "client/components/dashboard/dashboard-client.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/8b/a42ce8ee27/0/metadata.json",
+      "transcript": "/8b/a42ce8ee27/0/full.jsonl",
+      "content_hash": "/8b/a42ce8ee27/0/content_hash.txt",
+      "prompt": "/8b/a42ce8ee27/0/prompt.txt"
+    }
+  ]
+}
