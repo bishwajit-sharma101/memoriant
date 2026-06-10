@@ -52,8 +52,7 @@ export async function signup(formData: FormData) {
     return { error: error.message }
   }
 
-  revalidatePath('/dashboard')
-  redirect('/dashboard')
+  redirect('/verify-email')
 }
 
 export async function logout() {

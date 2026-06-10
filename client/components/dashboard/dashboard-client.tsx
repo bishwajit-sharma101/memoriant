@@ -78,6 +78,7 @@ export const DashboardClient: React.FC = () => {
           const { data: bms } = await supabase
             .from("bookmarks")
             .select("*")
+            .eq("user_id", user.id)
             .order("created_at", { ascending: false });
           if (bms) {
             setBookmarks(bms.map(mapBookmark));
