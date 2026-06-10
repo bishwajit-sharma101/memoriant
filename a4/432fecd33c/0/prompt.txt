@@ -1,0 +1,22 @@
+okk..next, so i have seen that when i signup as a new user i am immediately redirected to signin page and not told that i was sent a verification email and i have to verify there so can you also fix that , maybe something like after signup we redirect them to a beautiful premium ui page with big texts , where it says something like you need to verify your email , we sent you an email and when they confirm we redirect them to the signin page
+
+---
+
+I may have found a security issue.
+
+I created a second account using a different email and I can see the same bookmarks (KAEVRIX and bookmark).
+
+Please audit the entire bookmarks flow:
+
+1. Check if bookmarks are filtered by authenticated user id.
+2. Check all dashboard queries.
+3. Check bookmark creation logic.
+4. Check if demo/sample bookmarks are automatically inserted on signup.
+5. Verify Supabase RLS policies on bookmarks table.
+6. Confirm that one user cannot read another user's bookmarks through UI or direct queries.
+
+Do not make changes yet. First explain exactly why this is happening.
+
+---
+
+yah apply the fix
