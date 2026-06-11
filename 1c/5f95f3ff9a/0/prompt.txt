@@ -1,0 +1,1 @@
+add a back button to the pages , it should look clean and modern

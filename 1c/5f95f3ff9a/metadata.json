@@ -1,0 +1,19 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "1c5f95f3ff9a",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "client/app/signin/page.tsx",
+    "client/app/signup/page.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/1c/5f95f3ff9a/0/metadata.json",
+      "transcript": "/1c/5f95f3ff9a/0/full.jsonl",
+      "content_hash": "/1c/5f95f3ff9a/0/content_hash.txt",
+      "prompt": "/1c/5f95f3ff9a/0/prompt.txt"
+    }
+  ]
+}
