@@ -282,9 +282,11 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
           <div className="fixed inset-0 z-50 bg-[#FAF8F5] flex flex-col md:hidden animate-in fade-in zoom-in-95 duration-300">
             <div className="flex h-20 items-center justify-between px-6 sm:px-8 border-b border-stone-200/40">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden bg-stone-900 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
-                  <img src="/logo.png" alt="EagerMinds Logo" className="h-full w-full object-cover" />
-                </div>
+                <img 
+                  src="/logo.png" 
+                  alt="EagerMinds Logo" 
+                  className="h-9 w-9 object-contain drop-shadow-sm" 
+                />
                 <span className="text-sm font-black uppercase tracking-[0.2em] text-stone-900">
                   EagerMinds
                 </span>
