@@ -240,17 +240,13 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
 
           <div className="relative flex flex-col items-center justify-center gap-10 text-center max-w-2xl px-6 select-none">
             
-            {/* Minimal solid icon silhouette */}
-            <div 
-              className="animate-cinematic-tagline flex items-center justify-center h-16 w-16 rounded-full overflow-hidden bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+            {/* Minimal logo icon */}
+            <img 
+              src="/logo.png" 
+              alt="EagerMinds Logo" 
+              className="animate-cinematic-tagline h-16 w-16 object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.12)]" 
               style={{ animationDelay: "0.2s" }}
-            >
-              <img 
-                src="/logo.png" 
-                alt="EagerMinds Logo" 
-                className="h-full w-full object-cover" 
-              />
-            </div>
+            />
 
             {/* Brand Title with Cinematic Letter Expansion & Blur Reveal */}
             <div className="flex flex-col items-center gap-6">
@@ -340,9 +336,11 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
         <header className="sticky top-0 z-40 w-full border-b border-stone-200/40 bg-[#FAF8F5]/60 backdrop-blur-md animate-in fade-in duration-1000">
           <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden bg-stone-900 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
-                <img src="/logo.png" alt="EagerMinds Logo" className="h-full w-full object-cover" />
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="EagerMinds Logo" 
+                className="h-9 w-9 object-contain drop-shadow-sm" 
+              />
               <span className="hidden sm:block text-sm font-black uppercase tracking-[0.2em] text-stone-900">
                 EagerMinds
               </span>

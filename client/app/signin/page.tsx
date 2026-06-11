@@ -56,10 +56,11 @@ export default function SignInPage() {
         <div className="w-full lg:w-[45%] flex flex-col justify-center px-8 sm:px-16 lg:px-24 xl:px-32 relative bg-[var(--bg-right)] z-40 overflow-y-auto theme-transition">
           <div className="w-full max-w-[420px] mx-auto animate-in fade-in slide-in-from-right-8 duration-1000">
             <div className="flex justify-start mb-12">
-              <Link href="/" className="flex h-12 w-12 items-center justify-center rounded-full bg-white/60 backdrop-blur-md shadow-[0_10px_30px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12)] text-[var(--text-primary)] border border-white/50 hover:scale-105 transition-all duration-500 group theme-transition">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="h-5 w-5 group-hover:-translate-x-1 transition-transform duration-500">
+              <Link href="/" className="inline-flex items-center gap-2.5 rounded-full bg-white/60 px-5 py-2.5 backdrop-blur-md shadow-[0_5px_15px_-5px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.12)] text-[var(--text-primary)] border border-stone-200/50 hover:-translate-y-0.5 hover:bg-white transition-all duration-300 group theme-transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-300">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>
+                <span className="text-[10px] font-black uppercase tracking-widest mt-0.5">Back to Home</span>
               </Link>
             </div>
 

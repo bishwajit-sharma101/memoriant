@@ -393,9 +393,7 @@ export const DashboardClient: React.FC = () => {
           {/* Logo Brand Header */}
           <div className="h-20 px-6 border-b border-stone-200/40 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full overflow-hidden bg-stone-900 shadow-md">
-                <img src="/logo.png" alt="EagerMinds Logo" className="h-full w-full object-cover" />
-              </div>
+              <img src="/logo.png" alt="EagerMinds Logo" className="h-8 w-8 object-contain" />
               <span className="text-xs font-black uppercase tracking-[0.25em] text-stone-950">
                 EagerMinds
               </span>
