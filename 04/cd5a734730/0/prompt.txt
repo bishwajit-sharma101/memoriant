@@ -1,0 +1,13 @@
+do this when it becomes mobile size and stuff change the add refrence button from top to buttom like saying create to the bottom left
+
+---
+
+okkk...its fine now and the landing page is also responsive but the navbar when starting like having get started and signin is not responsive so can you fix that ......
+
+---
+
+well the hambuirger one isn't showing on mobile width
+
+---
+
+its still not working and another thing i noticed is when i opened the app on my phone my could see that i could scroll left to right like there a lot more room there ...like x axis overflow
