@@ -501,10 +501,19 @@ export const DashboardClient: React.FC = () => {
       <main className="flex-1 flex flex-col h-full bg-[#FAF8F5] relative z-20 overflow-hidden">
         
         {/* Workspace Toolbar Header */}
-        <header className="h-20 border-b border-stone-200/40 px-8 flex items-center justify-between shrink-0 bg-white/35 backdrop-blur-md">
+        <header className="h-20 border-b border-stone-200/40 px-4 md:px-8 flex items-center justify-between shrink-0 bg-white/35 backdrop-blur-md gap-3 md:gap-4">
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="md:hidden p-2 -ml-2 text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+
           {/* Real-time search bar */}
           <div className="flex-1 max-w-lg relative">
-            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-stone-400">
+            <div className="absolute inset-y-0 left-3 md:left-4 flex items-center pointer-events-none text-stone-400">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
@@ -518,15 +527,15 @@ export const DashboardClient: React.FC = () => {
                 setSearchQuery(e.target.value);
                 setKeyboardIndex(-1);
               }}
-              className="w-full pl-11 pr-14 py-2.5 rounded-full border border-stone-200/70 bg-white text-xs font-semibold focus:outline-none focus:border-stone-900 focus:shadow-sm transition-all"
+              className="w-full pl-10 md:pl-11 pr-10 md:pr-14 py-2.5 rounded-full border border-stone-200/70 bg-white text-xs font-semibold focus:outline-none focus:border-stone-900 focus:shadow-sm transition-all"
             />
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 font-mono text-[8px] font-bold text-stone-400 bg-stone-100 border border-stone-200/50 px-1.5 py-0.5 rounded shadow-sm">
+            <div className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 items-center gap-1 font-mono text-[8px] font-bold text-stone-400 bg-stone-100 border border-stone-200/50 px-1.5 py-0.5 rounded shadow-sm">
               /
             </div>
           </div>
 
           {/* Quick Create controls */}
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <button
               onClick={() => setIsAddModalOpen(true)}
               className="rounded-full bg-stone-900 px-5 py-2.5 text-[9px] font-black uppercase tracking-widest text-white shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center gap-2 cursor-pointer"
@@ -536,6 +545,17 @@ export const DashboardClient: React.FC = () => {
             </button>
           </div>
         </header>
+
+        {/* Mobile Floating Action Button (FAB) */}
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="md:hidden fixed bottom-6 left-6 z-[60] rounded-full bg-stone-900 text-white shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex items-center gap-2 px-5 py-3 cursor-pointer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          <span className="text-[10px] font-black uppercase tracking-widest">Create</span>
+        </button>
 
         {/* Tab Viewport */}
         <div className="flex-1 overflow-y-auto p-8 scroll-mt-20">

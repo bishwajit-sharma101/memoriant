@@ -27,6 +27,9 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
 
   // Transition exit state
   const [isExiting, setIsExiting] = useState(false);
+  
+  // Mobile Menu state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Scroll reveal states
   const [workflowRevealed, setWorkflowRevealed] = useState(false);
@@ -272,11 +275,66 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
 
       {/* Main page layout */}
       <div
-        className={`min-h-screen bg-[#FAF8F5] text-stone-900 font-sans selection:bg-stone-900 selection:text-white transition-colors duration-500 ${
+        className={`min-h-screen overflow-x-hidden bg-[#FAF8F5] text-stone-900 font-sans selection:bg-stone-900 selection:text-white transition-colors duration-500 ${
           isExiting ? "animate-exit-fade" : ""
         }`}
       >
         <div className="absolute inset-0 -z-30 h-full w-full bg-[#FAF8F5] bg-[linear-gradient(to_right,#e5e5e030_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e030_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)]" />
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 bg-[#FAF8F5] flex flex-col md:hidden animate-in fade-in zoom-in-95 duration-300">
+            <div className="flex h-20 items-center justify-between px-6 sm:px-8 border-b border-stone-200/40">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden bg-stone-900 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
+                  <img src="/logo.png" alt="EagerMinds Logo" className="h-full w-full object-cover" />
+                </div>
+                <span className="text-sm font-black uppercase tracking-[0.2em] text-stone-900">
+                  EagerMinds
+                </span>
+              </div>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 -mr-2 text-stone-500 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="flex flex-col px-6 py-10 gap-8 flex-1 overflow-y-auto">
+              <nav className="flex flex-col gap-6 text-sm font-black uppercase tracking-widest text-stone-600">
+                <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-stone-200/50 pb-4">Features</a>
+                <a href="#workflow" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-stone-200/50 pb-4">How it works</a>
+                <a href="#stats" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-stone-200/50 pb-4">Performance</a>
+              </nav>
+              
+              <div className="mt-auto flex flex-col gap-4">
+                {isLoggedIn ? (
+                  <button
+                    onClick={() => handleNavigate("/dashboard")}
+                    className="w-full rounded-full bg-stone-900 px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)]"
+                  >
+                    Go to Dashboard
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleNavigate("/signin")}
+                      className="w-full rounded-full border border-stone-300 px-6 py-4 text-xs font-bold uppercase tracking-widest text-stone-700 hover:bg-stone-50"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => handleNavigate("/signup")}
+                      className="w-full rounded-full bg-stone-900 px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)]"
+                    >
+                      Get Started
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Navigation Header */}
         <header className="sticky top-0 z-40 w-full border-b border-stone-200/40 bg-[#FAF8F5]/60 backdrop-blur-md animate-in fade-in duration-1000">
@@ -285,7 +343,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
               <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden bg-stone-900 shadow-[0_10px_20px_-5px_rgba(0,0,0,0.3)]">
                 <img src="/logo.png" alt="EagerMinds Logo" className="h-full w-full object-cover" />
               </div>
-              <span className="text-sm font-black uppercase tracking-[0.2em] text-stone-900">
+              <span className="hidden sm:block text-sm font-black uppercase tracking-[0.2em] text-stone-900">
                 EagerMinds
               </span>
             </div>
@@ -298,14 +356,16 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
 
             <div className="flex items-center gap-3">
               {isLoggedIn ? (
-                <button
-                  onClick={() => handleNavigate("/dashboard")}
-                  className="rounded-full bg-stone-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
-                >
-                  Go to Dashboard
-                </button>
+                <div className="hidden md:flex items-center">
+                  <button
+                    onClick={() => handleNavigate("/dashboard")}
+                    className="rounded-full bg-stone-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+                  >
+                    Go to Dashboard
+                  </button>
+                </div>
               ) : (
-                <>
+                <div className="hidden md:flex items-center gap-3">
                   <button
                     onClick={() => handleNavigate("/signin")}
                     className="rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-stone-500 hover:bg-stone-100/50 hover:text-stone-900 transition-all cursor-pointer"
@@ -318,8 +378,19 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
                   >
                     Get Started
                   </button>
-                </>
+                </div>
               )}
+
+              {/* Mobile Menu Toggle */}
+              <button 
+                onClick={() => setIsMobileMenuOpen(true)} 
+                className="flex md:hidden items-center justify-center p-2 -mr-2 text-stone-600 hover:text-stone-900 transition-colors cursor-pointer"
+                aria-label="Open Mobile Menu"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              </button>
             </div>
           </div>
         </header>
@@ -368,7 +439,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
             </div>
 
             {/* 3D Floating Canvas */}
-            <div className="lg:col-span-5 h-[500px] w-full flex items-center justify-center perspective-[2000px] preserve-3d select-none relative animate-in fade-in zoom-in-95 duration-1000 delay-300 fill-mode-both">
+            <div className="lg:col-span-5 h-[500px] w-full flex items-center justify-center perspective-[2000px] preserve-3d scale-75 sm:scale-100 origin-center select-none relative animate-in fade-in zoom-in-95 duration-1000 delay-300 fill-mode-both">
               {/* Tags Layer */}
               <div className="absolute z-10 animate-float-fast pointer-events-auto transform hover:translate-z-[40px] transition-transform duration-500" style={{ right: '15%', top: '15%' }}>
                 <div className="flex flex-col gap-2.5">
