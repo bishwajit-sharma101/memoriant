@@ -1,0 +1,192 @@
+okk..our landing page is already responsive but the dashboard isn't so make it responsive
+
+---
+
+fix this Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+[browser] ./components/dashboard/dashboard-client.tsx:1025:9
+Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+[browser] ./components/dashboard/dashboard-client.tsx:1025:9
+Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+[browser] ./components/dashboard/dashboard-client.tsx:1025:9
+Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+[browser] ./components/dashboard/dashboard-client.tsx:1025:9
+Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+ GET / 500 in 454ms (next.js: 26ms, proxy.ts: 395ms, application-code: 33ms)
+[browser] ./components/dashboard/dashboard-client.tsx:1025:9
+Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+[browser] Uncaught Error: ./components/dashboard/dashboard-client.tsx:1025:9
+Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+
+
+    at <unknown> (Error: ./components/dashboard/dashboard-client.tsx:1025:9)
+    at <unknown> (Error: (./components/dashboard/dashboard-client.tsx:1025:9)
+[browser] ./components/dashboard/dashboard-client.tsx:1025:9
+Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+[browser] ./components/dashboard/dashboard-client.tsx:1025:9
+Expected ';', '}' or <eof>
+  1023 |   );
+  1024 | };
+> 1025 | nded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-md cursor-poin...
+       |         ^^
+  1026 |                 >
+  1027 |                   Save Bookmark
+  1028 |                 </button>
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/dashboard/dashboard-client.tsx
+    ./app/dashboard/page.tsx
+
+---
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}> 
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" className="geist_a715..." suppressHydrationWarning={true}>    
+                          <body
+                            className="min-h-full flex flex-col"
+-                           cz-shortcut-listen="true"
+                          >
+                  ...
+
+ GET /dashboard 200 in 1086ms (next.js: 585ms, proxy.ts: 394ms, application-code: 107ms)
+[browser] Uncaught ReferenceError: isMobileMenuOpen is not defined
+    at DashboardClient (components/dashboard/dashboard-client.tsx:382:8)
+    at DashboardPage (app\dashboard\page.tsx:10:10)
+  380 |
+  381 |       {/* Mobile Sidebar Overlay */}
+> 382 |       {isMobileMenuOpen && (
+      |        ^
+  383 |         <div
+  384 |           className="fixed inset-0 z-40 bg-stone-900/20 backdrop-blur-sm md:hidden"
+  385 |           onClick={() => setIsMobileMenuOpen(false)}

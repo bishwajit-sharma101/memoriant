@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "bf682efaf6c0",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "client/components/dashboard/dashboard-client.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/bf/682efaf6c0/0/metadata.json",
+      "transcript": "/bf/682efaf6c0/0/full.jsonl",
+      "content_hash": "/bf/682efaf6c0/0/content_hash.txt",
+      "prompt": "/bf/682efaf6c0/0/prompt.txt"
+    }
+  ]
+}
