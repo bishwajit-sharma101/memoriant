@@ -59,6 +59,7 @@ export const DashboardClient: React.FC = () => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // New Bookmark Form States
   const [newUrl, setNewUrl] = useState("");
@@ -371,30 +372,45 @@ export const DashboardClient: React.FC = () => {
       
       {/* Toast Alert Banner */}
       <div
-        className={`absolute bottom-6 right-6 z-[60] px-4 py-3 rounded-2xl bg-stone-950 text-white font-mono text-[10px] tracking-wide shadow-2xl flex items-center gap-2 transition-all duration-500 transform ${
+        className={`absolute bottom-6 right-6 z-[70] px-4 py-3 rounded-2xl bg-stone-950 text-white font-mono text-[10px] tracking-wide shadow-2xl flex items-center gap-2 transition-all duration-500 transform ${
           toast ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
       >
         <span>{toast}</span>
       </div>
 
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-stone-900/20 backdrop-blur-sm md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* 1. Sidebar Panel */}
-      <aside className="w-64 border-r border-stone-200/50 bg-[#F4F3EE]/50 flex flex-col justify-between shrink-0 relative z-30 select-none">
+      <aside className={`fixed md:relative inset-y-0 left-0 w-64 border-r border-stone-200/50 bg-[#F4F3EE]/95 md:bg-[#F4F3EE]/50 backdrop-blur-xl md:backdrop-blur-none flex flex-col justify-between shrink-0 z-50 transform transition-transform duration-300 ease-in-out select-none ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
         <div>
           {/* Logo Brand Header */}
-          <div className="h-20 px-6 border-b border-stone-200/40 flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full overflow-hidden bg-stone-900 shadow-md">
-              <img src="/logo.png" alt="EagerMinds Logo" className="h-full w-full object-cover" />
+          <div className="h-20 px-6 border-b border-stone-200/40 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full overflow-hidden bg-stone-900 shadow-md">
+                <img src="/logo.png" alt="EagerMinds Logo" className="h-full w-full object-cover" />
+              </div>
+              <span className="text-xs font-black uppercase tracking-[0.25em] text-stone-950">
+                EagerMinds
+              </span>
             </div>
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-stone-950">
-              EagerMinds
-            </span>
+            <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden p-1 text-stone-500 hover:text-stone-900 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
           {/* Main Navigation Section */}
           <nav className="p-4 flex flex-col gap-1.5">
             <button
-              onClick={() => { setActiveTab("vault"); setSelectedTag(null); }}
+              onClick={() => { setActiveTab("vault"); setSelectedTag(null); setIsMobileMenuOpen(false); }}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                 activeTab === "vault" && !selectedTag
                   ? "bg-stone-900 text-white shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)]"
@@ -413,7 +429,7 @@ export const DashboardClient: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setActiveTab("bio")}
+              onClick={() => { setActiveTab("bio"); setIsMobileMenuOpen(false); }}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                 activeTab === "bio"
                   ? "bg-stone-900 text-white shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)]"
@@ -439,7 +455,7 @@ export const DashboardClient: React.FC = () => {
               {uniqueTags.map((tag) => (
                 <button
                   key={tag}
-                  onClick={() => { setActiveTab("vault"); setSelectedTag(tag); }}
+                  onClick={() => { setActiveTab("vault"); setSelectedTag(tag); setIsMobileMenuOpen(false); }}
                   className={`w-full flex items-center justify-between py-1.5 text-xs font-bold lowercase transition-colors cursor-pointer ${
                     selectedTag === tag ? "text-stone-900" : "text-stone-400 hover:text-stone-700"
                   }`}
@@ -708,7 +724,7 @@ export const DashboardClient: React.FC = () => {
                 </div>
 
                 {/* Live Mobile Profile Simulator Preview (Right) */}
-                <div className="md:col-span-7 flex justify-center">
+                <div className="lg:col-span-7 flex justify-center">
                   <div className="w-[290px] h-[520px] bg-[#FAF8F5] border border-stone-900/20 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.12)] rounded-[2.8rem] p-5 flex flex-col justify-between items-center select-none border-4 border-stone-950/80 relative">
                     {/* Device Speaker Notch */}
                     <div className="absolute top-2 w-28 h-4 rounded-full bg-stone-950/80 flex items-center justify-center">
