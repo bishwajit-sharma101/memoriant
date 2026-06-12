@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { logout } from "@/app/auth/actions";
 
 interface MockBookmark {
   title: string;
@@ -9,7 +10,7 @@ interface MockBookmark {
   tag: string;
 }
 
-export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLoggedIn }) => {
+export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: string, userName?: string, userHandle?: string }> = ({ isLoggedIn, userEmail, userName, userHandle }) => {
   const router = useRouter();
   
   // Loader states
@@ -31,6 +32,20 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
   // Mobile Menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Profile Dropdown state
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsProfileDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   // Scroll reveal states
   const [workflowRevealed, setWorkflowRevealed] = useState(false);
   const [statsRevealed, setStatsRevealed] = useState(false);
@@ -38,9 +53,6 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
 
   // Stats visibility state
   const [statsVisible, setStatsVisible] = useState(false);
-  const [bookmarksCount, setBookmarksCount] = useState(0);
-  const [speedCount, setSpeedCount] = useState(100);
-  const [teamsCount, setTeamsCount] = useState(0);
 
   // Workflow simulator state
   const [activeStep, setActiveStep] = useState<number>(1);
@@ -126,6 +138,14 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
             } else if (entry.target.id === "features") {
               setFeaturesRevealed(true);
             }
+          } else {
+            if (entry.target.id === "workflow") {
+              setWorkflowRevealed(false);
+            } else if (entry.target.id === "stats") {
+              setStatsRevealed(false);
+            } else if (entry.target.id === "features") {
+              setFeaturesRevealed(false);
+            }
           }
         });
       },
@@ -146,25 +166,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
     };
   }, []);
 
-  // Stats Count-Up interpolation loop
-  useEffect(() => {
-    if (!statsVisible) return;
-    let tick = 0;
-    const interval = setInterval(() => {
-      tick += 1;
-      if (tick >= 100) {
-        setBookmarksCount(2.5);
-        setSpeedCount(14);
-        setTeamsCount(12);
-        clearInterval(interval);
-      } else {
-        setBookmarksCount(Number((tick * 0.025).toFixed(2)));
-        setSpeedCount(Number((100 - tick * 0.86).toFixed(1)));
-        setTeamsCount(Number((tick * 0.12).toFixed(1)));
-      }
-    }, 15);
-    return () => clearInterval(interval);
-  }, [statsVisible]);
+
 
   // Auto-Tag preset analyzer
   useEffect(() => {
@@ -271,6 +273,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
 
       {/* Main page layout */}
       <div
+        data-vibe="2"
         className={`min-h-screen overflow-x-hidden bg-[#FAF8F5] text-stone-900 font-sans selection:bg-stone-900 selection:text-white transition-colors duration-500 ${
           isExiting ? "animate-exit-fade" : ""
         }`}
@@ -356,13 +359,58 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
 
             <div className="flex items-center gap-3">
               {isLoggedIn ? (
-                <div className="hidden md:flex items-center">
+                <div className="hidden md:flex items-center relative" ref={dropdownRef}>
                   <button
-                    onClick={() => handleNavigate("/dashboard")}
-                    className="rounded-full bg-stone-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+                    onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                    className="flex items-center gap-2 rounded-full border border-stone-200 bg-white/50 px-2 py-1.5 hover:bg-white hover:shadow-sm transition-all cursor-pointer"
                   >
-                    Go to Dashboard
+                    <div className="h-7 w-7 rounded-full bg-stone-900 text-white flex items-center justify-center text-[10px] font-bold">
+                      {(userName || userEmail || "U").charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-xs font-bold text-stone-700 max-w-[100px] truncate px-1">
+                      {userName || userEmail?.split('@')[0] || "User"}
+                    </span>
+                    <svg className={`w-3 h-3 text-stone-500 mr-1 transition-transform duration-200 ${isProfileDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
                   </button>
+                  
+                  {isProfileDropdownOpen && (
+                    <div className="absolute top-full mt-2 right-0 w-48 rounded-xl border border-stone-200 bg-white shadow-xl overflow-hidden z-50 py-1">
+                      <button
+                        onClick={() => {
+                          setIsProfileDropdownOpen(false);
+                          handleNavigate("/dashboard");
+                        }}
+                        className="w-full text-left px-4 py-2.5 text-xs font-bold text-stone-700 hover:bg-stone-50 transition-colors"
+                      >
+                        Dashboard
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsProfileDropdownOpen(false);
+                          if (userHandle) {
+                            handleNavigate(`/${userHandle}`);
+                          } else {
+                            handleNavigate("/dashboard");
+                          }
+                        }}
+                        className="w-full text-left px-4 py-2.5 text-xs font-bold text-stone-700 hover:bg-stone-50 transition-colors"
+                      >
+                        Public Profile
+                      </button>
+                      <div className="h-px bg-stone-100 my-1" />
+                      <button
+                        onClick={async () => {
+                          setIsProfileDropdownOpen(false);
+                          await logout();
+                        }}
+                        className="w-full text-left px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="hidden md:flex items-center gap-3">
@@ -688,29 +736,29 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean }> = ({ isLogged
           </div>
         </section>
 
-        {/* Stats Section with dynamic counts */}
-        <section id="stats" className={`py-20 border-b border-stone-200/20 scroll-mt-20 reveal-on-scroll ${statsRevealed ? "revealed" : ""}`}>
-          <div className="mx-auto max-w-7xl px-6 sm:px-8">
-            <dl className="grid grid-cols-1 gap-y-12 gap-x-8 text-center sm:grid-cols-3">
-              <div className="mx-auto flex max-w-xs flex-col gap-y-3">
-                <dt className="text-[10px] font-black uppercase tracking-widest text-stone-400">Bookmarks Indexing</dt>
-                <dd className="order-first text-5xl font-black tracking-tight sm:text-6xl text-stone-900 theme-transition">
-                  {statsVisible ? `${bookmarksCount.toFixed(2)}M+` : "0.00M+"}
-                </dd>
-              </div>
-              <div className="mx-auto flex max-w-xs flex-col gap-y-3">
-                <dt className="text-[10px] font-black uppercase tracking-widest text-stone-400">Search Speeds</dt>
-                <dd className="order-first text-5xl font-black tracking-tight sm:text-6xl text-stone-900 theme-transition">
-                  {statsVisible ? `< ${speedCount.toFixed(1)}ms` : "< 100ms"}
-                </dd>
-              </div>
-              <div className="mx-auto flex max-w-xs flex-col gap-y-3">
-                <dt className="text-[10px] font-black uppercase tracking-widest text-stone-400">Developer Teams</dt>
-                <dd className="order-first text-5xl font-black tracking-tight sm:text-6xl text-stone-900 theme-transition">
-                  {statsVisible ? `${teamsCount.toFixed(1)}K+` : "0.0K+"}
-                </dd>
-              </div>
-            </dl>
+        {/* Cinematic Scroll Manifesto Section */}
+        <section 
+          id="stats" 
+          className="py-28 border-b border-stone-200/20 scroll-mt-20 overflow-hidden relative bg-[#FAF8F5] text-stone-900"
+        >
+          {/* Ambient Glows */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(254,228,226,0.2)_0%,transparent_70%)] pointer-events-none" />
+
+          <div className="mx-auto max-w-5xl px-6 sm:px-8 flex flex-col items-center justify-center min-h-[50vh] relative z-10 select-none text-center">
+            
+            <div className="flex-1 flex flex-col items-center justify-center font-serif py-4">
+              <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-stone-400 mb-8 font-sans">
+                02 / THE LITERARY ARCHIVE
+              </span>
+              <h2 className={`cinematic-blur-text ${statsRevealed ? "revealed" : ""} text-5xl sm:text-7xl md:text-8xl font-normal text-stone-900 max-w-5xl leading-tight`}>
+                Curate <span className="italic font-light text-stone-500">thoughts</span>,<br />
+                not just <span className="italic font-light">connections</span>.
+              </h2>
+              <p className={`cinematic-blur-text ${statsRevealed ? "revealed" : ""} transition-all delay-300 mt-6 text-stone-500/85 text-sm sm:text-base font-medium max-w-lg tracking-wide`}>
+                A tactile journal built for thinkers, developers, and creators. Beautifully formatted, forever preserved.
+              </p>
+            </div>
+
           </div>
         </section>
 

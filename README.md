@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EagerMinds Bookmarks — Personal Vault & Bio Link
 
-## Getting Started
+A premium, keyboard-first bookmarks repository (think "Linktree meets Pocket") built with Next.js 16, Tailwind CSS, and Supabase.
 
-First, run the development server:
+---
 
+## Features
+
+1. **Authentication & Accounts**: Secure sign-up and sign-in via email/password.
+2. **Private Bookmarks Vault**: Add, edit, organize, and delete bookmarks. Supports notes, tag categories, and search filters.
+3. **Robust Database-level Security (RLS)**: Enforces row-level security on Supabase so users can only read, write, edit, or delete their own data.
+4. **Public Bio Profile**: Claims a unique `@handle` derived from name/email and displays public-only links at `/[handle]`.
+5. **Route Protection**: Middleware dynamically protects `/dashboard` and redirects authenticated users away from `/signin` and `/signup`.
+6. **Cinematic UI**: Glassmorphic styling, ambient lighting, smooth typography expansion loader, and responsive layouts.
+
+---
+
+## How to Run Locally
+
+### 1. Clone & Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <your-repo-url>
+cd eagerminds-bookmarks-task/client
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configure Environment Variables
+Create a `.env.local` file inside the `client/` directory with your Supabase credentials:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Run the App
+To run in development mode (with hot reloading):
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To run a production build:
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## AI Pair Programming Log (Critique & Corrections)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* **Logo Border Clashes**: During visual styling, the AI agent nested our custom leaf-shaped `logo.png` inside round `bg-stone-900` wrappers, causing double-borders. I noticed the shape mismatch and directed the agent to render the logo directly as an `object-contain` element.
+* **Cached Build & Middleware**: When implementing middleware redirects for signin/signup, the changes didn't seem to apply. I realized the active `npm run start` production server process was serving cached code from an hour prior; I instructed the agent to build the project and guided it to wait for me to stop and restart the runner.
+* **Database SQL Bypass**: To enforce handle regex format and reserved username lists, the agent initially proposed direct database trigger modifications. Knowing this required manual SQL edits on my Supabase dashboard, I steered the agent to intercept and validate handle generation entirely within the signup server action instead, ensuring a zero-configuration database sync.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Future Improvements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+With more time, I would implement **Automatic Metadata Scraping**. When a user inputs a URL, the server action would fetch the target webpage's HTML in the background and parse its `meta` tags (e.g. Open Graph tags). This would automatically populate the bookmark's title, description, and thumbnail image, creating a richer directory layout without requiring manual input.

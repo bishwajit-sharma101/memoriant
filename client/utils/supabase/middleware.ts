@@ -45,5 +45,16 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  if (
+    user &&
+    (request.nextUrl.pathname.startsWith('/signin') ||
+      request.nextUrl.pathname.startsWith('/signup'))
+  ) {
+    // user is already logged in, redirect them to the dashboard
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+    return NextResponse.redirect(url)
+  }
+
   return supabaseResponse
 }

@@ -10,5 +10,15 @@ export default async function Home() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
-  return <LandingPageClient isLoggedIn={!!user} />;
+  let handle = "";
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("handle")
+      .eq("id", user.id)
+      .single();
+    if (profile) handle = profile.handle;
+  }
+  
+  return <LandingPageClient isLoggedIn={!!user} userEmail={user?.email} userName={user?.user_metadata?.full_name || user?.user_metadata?.name || undefined} userHandle={handle} />;
 }
