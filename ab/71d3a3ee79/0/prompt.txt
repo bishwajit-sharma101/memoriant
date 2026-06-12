@@ -1,0 +1,5 @@
+okkk..in our landing page at top left we have the dashboard button when we are signed in and also in the middle in landing page , so what i want to do is remove the dashboard button at the top left and change it to change it to the users name or profile and when cliked Click → dropdown:
+
+Dashboard
+Public Profile
+Sign Out .......do that

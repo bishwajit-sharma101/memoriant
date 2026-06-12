@@ -1,0 +1,59 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "ab71d3a3ee79",
+  "session_id": "68c63424-096f-4647-bb73-d68114d50188",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-12T18:51:18.0347935Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md",
+    "client/app/auth/actions.ts",
+    "client/app/page.tsx",
+    "client/app/signin/page.tsx",
+    "client/app/signup/page.tsx",
+    "client/components/landing/landing-page-client.tsx",
+    "client/utils/supabase/middleware.ts"
+  ],
+  "agent": "Gemini CLI",
+  "model": "gemini-3.1-pro-preview",
+  "turn_id": "01905eaa7b90",
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-12T18:51:17.9960665Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 300,
+    "human_removed": 32,
+    "total_committed": 44,
+    "total_lines_changed": 332,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 203,
+      "user_lines_removed": 139,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "README.md": 45,
+        "client/app/auth/actions.ts": 88,
+        "client/app/signin/page.tsx": 5,
+        "client/app/signup/page.tsx": 5,
+        "client/utils/supabase/middleware.ts": 60
+      },
+      "user_removed_per_file": {
+        "README.md": 22,
+        "client/app/auth/actions.ts": 66,
+        "client/app/signin/page.tsx": 1,
+        "client/app/signup/page.tsx": 1,
+        "client/utils/supabase/middleware.ts": 49
+      }
+    }
+  ]
+}
