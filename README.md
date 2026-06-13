@@ -41,6 +41,13 @@ This application was engineered using an iterative, dual-layered AI-assisted dev
 
 This project highlights a productive combination of automated generation, manual code validation, and iterative design correction.
 
+> [!NOTE]  
+> **Recording Transparency**  
+>   
+> Entire CLI was used and configured throughout development as requested. Core implementation work, backend architecture, authentication flows, database integration, and testing workflows were performed through Gemini CLI and are available in the recorded checkpoint history.  
+>   
+> Some UI/UX refinements, responsive design iterations, and visual polishing were performed using an editor-integrated AI assistant (Gemini 3.5 Flash). Since these interactions occurred within the IDE rather than the CLI, they are reflected in the final codebase but are not present in the Entire CLI session recordings.
+
 ---
 
 ## 🛠️ Local Development Setup
