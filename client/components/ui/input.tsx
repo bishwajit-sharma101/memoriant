@@ -26,7 +26,7 @@ export const Input: React.FC<InputProps> = ({
           type={type}
           value={value}
           placeholder=" "
-          className={`peer w-full border-b-[1.5px] border-[var(--text-muted)]/30 bg-transparent py-2 text-[var(--text-primary)] text-2xl sm:text-3xl font-bold transition-all duration-500 focus:border-[var(--text-primary)] focus:outline-none placeholder:text-transparent ${
+          className={`peer w-full border-b-[1.5px] border-[var(--text-muted)]/30 bg-transparent py-2 text-[var(--text-primary)] text-base sm:text-xl md:text-2xl font-bold transition-all duration-500 focus:border-[var(--text-primary)] focus:outline-none placeholder:text-transparent ${
             rightElement ? "pr-16" : ""
           } ${
             error
@@ -41,7 +41,7 @@ export const Input: React.FC<InputProps> = ({
             className={`absolute left-0 transition-all duration-500 pointer-events-none ${
               value
                 ? "-top-4 text-[10px] font-bold text-[var(--text-primary)] uppercase tracking-widest"
-                : "top-2 text-xl sm:text-2xl font-semibold text-[var(--text-muted)] peer-focus:-top-4 peer-focus:text-[10px] peer-focus:font-bold peer-focus:text-[var(--text-primary)] peer-focus:uppercase peer-focus:tracking-widest"
+                : "top-2 text-sm sm:text-base md:text-lg font-semibold text-[var(--text-muted)] peer-focus:-top-4 peer-focus:text-[10px] peer-focus:font-bold peer-focus:text-[var(--text-primary)] peer-focus:uppercase peer-focus:tracking-widest"
             }`}
           >
             {label}

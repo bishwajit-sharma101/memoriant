@@ -6,7 +6,7 @@ import { SignUpForm } from "../../components/auth/signup-form";
 import { AuthThemeProvider } from "../../components/auth/auth-theme-provider";
 
 export const metadata: Metadata = {
-  title: "Sign Up - EagerMinds Bookmarks",
+  title: "Sign Up - MEMORIANT Bookmarks",
   description: "Create an account to start bookmarking and organizing your links.",
 };
 
@@ -26,9 +26,9 @@ export default function SignUpPage() {
             <div className="absolute z-20" style={{ animation: 'float 8s ease-in-out infinite' }}>
               <div className="w-[320px] h-[440px] rounded-[2.5rem] bg-white/65 backdrop-blur-3xl border border-white/85 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] flex flex-col p-8 transform -rotate-y-[15deg] rotate-x-[10deg] translate-z-[50px] theme-transition">
                 <img
-                  src="/logo.png"
-                  alt="EagerMinds Logo"
-                  className="w-14 h-14 object-contain mb-8"
+                  src="/favicon-logo.png"
+                  alt="MEMORIANT Logo"
+                  className="w-16 h-16 object-contain mb-8"
                 />
                 <div className="w-3/4 h-5 rounded-full bg-stone-300/60 mb-5 theme-transition" />
                 <div className="w-1/2 h-5 rounded-full bg-stone-300/60 mb-10 theme-transition" />

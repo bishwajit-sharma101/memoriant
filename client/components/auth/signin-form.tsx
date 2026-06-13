@@ -93,11 +93,6 @@ export const SignInForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
           disabled={isLoading}
-          rightElement={
-            <a href="#" className="text-[10px] font-bold text-stone-400 uppercase tracking-widest hover:text-stone-900 transition-colors">
-              Forgot?
-            </a>
-          }
         />
       </div>
 

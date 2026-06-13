@@ -464,9 +464,9 @@ export const DashboardClient: React.FC = () => {
           {/* Logo Brand Header */}
           <div className="h-20 px-6 border-b border-stone-200/40 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="EagerMinds Logo" className="h-8 w-8 object-contain" />
+              <img src="/favicon-logo.png" alt="MEMORIANT Logo" className="h-6 w-6 object-contain" />
               <span className="text-xs font-black uppercase tracking-[0.25em] text-stone-950">
-                EagerMinds
+                MEMORIANT
               </span>
             </div>
             <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden p-1 text-stone-500 hover:text-stone-900 cursor-pointer">
@@ -832,7 +832,7 @@ export const DashboardClient: React.FC = () => {
                         <label className="text-[9px] font-black uppercase tracking-widest text-stone-400">Bio Username</label>
                         <input
                           type="text"
-                          value={userProfile?.handle ? `@${userProfile.handle}` : "@eagerminds"}
+                          value={userProfile?.handle ? `@${userProfile.handle}` : "@memoriant"}
                           disabled
                           className="w-full mt-1.5 px-4 py-2 border border-stone-200 bg-stone-50 text-xs font-semibold rounded-xl text-stone-450 focus:outline-none"
                         />
@@ -916,7 +916,7 @@ export const DashboardClient: React.FC = () => {
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-2.5 h-2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                       </svg>
-                      {userProfile?.handle ? `${userProfile.handle}.bio` : "eagerminds.bio"}
+                      {userProfile?.handle ? `${userProfile.handle}.bio` : "memoriant.bio"}
                     </div>
                   </div>
                 </div>
@@ -1006,7 +1006,7 @@ export const DashboardClient: React.FC = () => {
                   Community Suggestions
                 </span>
                 <div className="flex flex-wrap items-center justify-center gap-2 max-w-md">
-                  {["alex_dev", "rahul", "design_hub"].map((h) => (
+                  {["user_f773df22", "raj", "letmesolo"].map((h) => (
                     <button
                       key={h}
                       onClick={() => {

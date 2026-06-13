@@ -51,7 +51,7 @@ export async function signup(formData: FormData) {
     'signin', 'signup', 'dashboard', 'auth', 'verify-email', 'api', 
     '_next', 'static', 'favicon', 'favicon.ico', 'logo', 'logo.png', 
     'robots.txt', 'sitemap.xml', 'public', 'index', 'home', 'admin', 
-    'user', 'eagerminds'
+    'user', 'memoriant'
   ];
 
   if (RESERVED_HANDLES.includes(baseHandle)) {

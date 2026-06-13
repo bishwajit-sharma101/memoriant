@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Verify Your Email | EagerMinds Bookmarks",
+  title: "Verify Your Email | MEMORIANT Bookmarks",
   description: "Check your inbox to verify your email and activate your account.",
 };
 
@@ -34,7 +34,7 @@ export default function VerifyEmailPage() {
         </h1>
         
         <p className="mt-8 text-base sm:text-lg text-stone-500 font-medium leading-relaxed max-w-md">
-          We’ve sent a verification link to your email address. Please click the link to activate your EagerMinds account.
+          We’ve sent a verification link to your email address. Please click the link to activate your MEMORIANT account.
         </p>
 
         <div className="mt-12 flex flex-col w-full max-w-sm gap-4">

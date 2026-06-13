@@ -225,37 +225,40 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
       {/* ═══ Cinematic Luxury Typographic Loader ═══ */}
       {isLoading && (
         <div
-          className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#090908] overflow-hidden ${
+          className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#FAF8F5] overflow-hidden ${
             loaderExiting ? "loader-exit" : ""
           }`}
         >
+          {/* Cohesive Premium grid background */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e5e030_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e030_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+
           {/* Breathing ambient champagne glow */}
           <div 
-            className="absolute top-1/2 left-1/2 w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(217,195,176,0.05)_0%,transparent_70%)] pointer-events-none loader-ambient-glow" 
+            className="absolute top-1/2 left-1/2 w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(217,195,176,0.3)_0%,transparent_70%)] pointer-events-none loader-ambient-glow" 
             style={{ transform: "translate(-50%, -50%)" }}
           />
 
           <div className="relative flex flex-col items-center justify-center gap-10 text-center max-w-2xl px-6 select-none">
             
-            {/* Minimal logo icon */}
+            {/* Minimal logo icon - noticeably larger */}
             <img 
-              src="/logo.png" 
-              alt="EagerMinds Logo" 
-              className="animate-cinematic-tagline h-16 w-16 object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.12)]" 
+              src="/favicon-logo.png" 
+              alt="MEMORIANT Logo" 
+              className="animate-cinematic-tagline h-20 w-20 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.08)]" 
               style={{ animationDelay: "0.2s" }}
             />
 
             {/* Brand Title with Cinematic Letter Expansion & Blur Reveal */}
             <div className="flex flex-col items-center gap-6">
               <h1 
-                className="animate-cinematic-title text-4xl sm:text-6xl md:text-7xl font-extralight text-stone-100 tracking-[0.35em] uppercase leading-none"
+                className="animate-cinematic-title text-4xl sm:text-6xl md:text-7xl font-extralight text-stone-900 tracking-[0.35em] uppercase leading-none"
               >
-                EagerMinds
+                MEMORIANT
               </h1>
 
               {/* Tiny minimal percentage loader */}
               <span 
-                className="animate-cinematic-tagline text-[10px] font-mono text-stone-500 tracking-[0.25em] tabular-nums"
+                className="animate-cinematic-tagline text-[10px] font-mono text-stone-400 tracking-[0.25em] tabular-nums"
                 style={{ animationDelay: "0.6s" }}
               >
                 {Math.round(loadProgress)}%
@@ -280,12 +283,12 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
           <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8">
             <div className="flex items-center gap-3">
               <img 
-                src="/logo.png" 
-                alt="EagerMinds Logo" 
-                className="h-9 w-9 object-contain drop-shadow-sm" 
+                src="/favicon-logo.png" 
+                alt="MEMORIANT Logo" 
+                className="h-6 w-6 object-contain drop-shadow-sm" 
               />
               <span className="hidden sm:block text-sm font-black uppercase tracking-[0.2em] text-stone-900">
-                EagerMinds
+                MEMORIANT
               </span>
             </div>
 
@@ -450,9 +453,9 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
                 <div className="w-[220px] h-[310px] bg-[#FAF8F5] border border-stone-200 shadow-[0_35px_70px_-15px_rgba(0,0,0,0.12)] rounded-[2.2rem] p-4 flex flex-col items-center justify-between">
                   <div className="flex flex-col items-center mt-2">
                     <div className="h-11 w-11 rounded-full bg-stone-900 border border-white/60 flex items-center justify-center text-white font-black text-xs shadow-inner">
-                      EM
+                      M
                     </div>
-                    <span className="text-[10px] font-black tracking-wider text-stone-800 mt-2">@eagerminds</span>
+                    <span className="text-[10px] font-black tracking-wider text-stone-800 mt-2">@memoriant</span>
                     <span className="text-[8px] font-bold tracking-wide text-stone-400 mt-0.5">My Resource Hub</span>
                   </div>
 
@@ -469,7 +472,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
                   </div>
 
                   <div className="text-[7px] font-black tracking-widest text-stone-300 uppercase pb-1">
-                    EagerMinds Bio
+                    MEMORIANT Bio
                   </div>
                 </div>
               </div>
@@ -633,9 +636,9 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
                     <div className="w-[170px] h-[260px] bg-[#FAF8F5] border border-stone-200 rounded-[1.8rem] shadow-md p-3 flex flex-col items-center justify-between relative z-10">
                       <div className="flex flex-col items-center">
                         <div className="h-8 w-8 rounded-full bg-stone-900 border border-white/60 flex items-center justify-center text-white text-[9px] font-black shadow-inner">
-                          EM
+                          M
                         </div>
-                        <span className="text-[8px] font-black text-stone-800 mt-1">@eagerminds</span>
+                        <span className="text-[8px] font-black text-stone-800 mt-1">@memoriant</span>
                       </div>
                       
                       <div className="w-full flex flex-col gap-1.5 justify-center flex-1 my-3">
@@ -812,7 +815,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
                 <div className="flex items-center gap-1.5 bg-white border border-stone-200/50 rounded-full px-3 py-1 mb-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-550 animate-pulse" />
                   <span className="text-[8px] font-mono text-stone-450 select-all truncate">
-                    eagerminds.bio/{selectedProfile}
+                    memoriant.bio/{selectedProfile}
                   </span>
                 </div>
 
@@ -873,7 +876,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
         </section>
 
         <footer className="py-16 text-center text-xs font-bold uppercase tracking-widest text-stone-400 border-t border-stone-200/20 bg-[#F3EFE9]/10">
-          <p>© 2026 EagerMinds Bookmarks. All rights reserved.</p>
+          <p>© 2026 MEMORIANT Bookmarks. All rights reserved.</p>
         </footer>
       </div>
     </>
