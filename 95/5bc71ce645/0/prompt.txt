@@ -1,0 +1,5 @@
+okk..heres your new task , as you know in our landing page we have the Curated Team Workspaces and that is a feature that we don't have to change it something like showing that they can share their handle and poeple can see what their public profile looks like , like what bookmarks they have made public
+
+---
+
+okk....this is ur next task , in dashboard sidebar add another section called search profiles and there have a premium looking page with searchbar where they can search handles and get to that page
