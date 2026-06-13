@@ -21,7 +21,7 @@
 
 | Resource | Link |
 | --- | --- |
-| **Live Production URL** | `[DEPLOYED_URL]` |
+| **Live Production URL** | [memoriant.vercel.app](https://memoriant.vercel.app/) |
 | **GitHub Repository** | [bishwajit-sharma101/memoriant](https://github.com/bishwajit-sharma101/memoriant) |
 | **AI Agent Checkpoint Branch** | `entire/checkpoints/v1` (Tracked via Entire CLI) |
 
