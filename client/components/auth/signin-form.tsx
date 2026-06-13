@@ -24,8 +24,18 @@ export const SignInForm: React.FC = () => {
 
   const validate = () => {
     const newErrors: { email?: string; password?: string; server?: string } = {};
-    if (!email) newErrors.email = "Required";
-    if (!password) newErrors.password = "Required";
+    if (!email) {
+      newErrors.email = "Required";
+    } else if (email.length > 100) {
+      newErrors.email = "Max 100 characters";
+    }
+
+    if (!password) {
+      newErrors.password = "Required";
+    } else if (password.length > 72) {
+      newErrors.password = "Max 72 characters";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -81,6 +91,7 @@ export const SignInForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
           disabled={isLoading}
+          maxLength={100}
         />
       </div>
 
@@ -93,6 +104,7 @@ export const SignInForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
           disabled={isLoading}
+          maxLength={72}
         />
       </div>
 

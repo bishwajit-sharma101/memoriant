@@ -28,7 +28,7 @@ export default function SignInPage() {
                 <img
                   src="/favicon-logo.png"
                   alt="MEMORIANT Logo"
-                  className="w-16 h-16 object-contain mb-8"
+                  className="w-24 h-24 object-contain mb-8"
                 />
                 <div className="w-3/4 h-5 rounded-full bg-stone-300/60 mb-5 theme-transition" />
                 <div className="w-1/2 h-5 rounded-full bg-stone-300/60 mb-10 theme-transition" />

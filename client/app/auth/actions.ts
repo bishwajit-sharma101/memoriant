@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
+import { generateAndValidateHandle } from '@/utils/handle'
 
 export async function login(formData: FormData) {
   const email = formData.get('email') as string
@@ -11,6 +12,9 @@ export async function login(formData: FormData) {
   if (!email || !password) {
     return { error: 'Email and password are required' }
   }
+
+  if (email.length > 100) return { error: 'Email must be 100 characters or less' }
+  if (password.length > 72) return { error: 'Password must be 72 characters or less' }
 
   const supabase = await createClient()
 
@@ -36,27 +40,15 @@ export async function signup(formData: FormData) {
     return { error: 'Name, email, and password are required' }
   }
 
-  // Compute expected handle exactly like the DB trigger does
-  const nameCleaned = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const emailPrefix = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-  const baseHandle = nameCleaned || emailPrefix || 'user';
+  if (name.length > 100) return { error: 'Name must be 100 characters or less' }
+  if (email.length > 100) return { error: 'Email must be 100 characters or less' }
+  if (password.length > 72) return { error: 'Password must be 72 characters or less' }
 
-  // Handle Validation Regex (Must be at least 3 characters long, alphanumeric)
-  if (baseHandle.length < 3) {
-    return { error: 'Your name or email prefix must contain at least 3 alphanumeric characters to generate a valid username.' }
+  const handleResult = generateAndValidateHandle(name, email)
+  if (handleResult.error) {
+    return { error: handleResult.error }
   }
-
-  // Reserved Handles Check
-  const RESERVED_HANDLES = [
-    'signin', 'signup', 'dashboard', 'auth', 'verify-email', 'api', 
-    '_next', 'static', 'favicon', 'favicon.ico', 'logo', 'logo.png', 
-    'robots.txt', 'sitemap.xml', 'public', 'index', 'home', 'admin', 
-    'user', 'memoriant'
-  ];
-
-  if (RESERVED_HANDLES.includes(baseHandle)) {
-    return { error: 'This name or email generates a reserved username. Please use a different name or email.' }
-  }
+  const baseHandle = handleResult.handle!
 
   const supabase = await createClient()
 

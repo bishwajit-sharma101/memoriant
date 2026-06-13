@@ -98,7 +98,8 @@ export const DashboardClient: React.FC = () => {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab");
       if (tabParam === "search" || tabParam === "bio" || tabParam === "vault") {
-        setActiveTab(tabParam as any);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setActiveTab(tabParam as "search" | "bio" | "vault");
       }
     }
   }, []);
@@ -464,7 +465,7 @@ export const DashboardClient: React.FC = () => {
           {/* Logo Brand Header */}
           <div className="h-20 px-6 border-b border-stone-200/40 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <img src="/favicon-logo.png" alt="MEMORIANT Logo" className="h-6 w-6 object-contain" />
+              <img src="/favicon-logo.png" alt="MEMORIANT Logo" className="h-8 w-8 object-contain" />
               <span className="text-xs font-black uppercase tracking-[0.25em] text-stone-950">
                 MEMORIANT
               </span>
@@ -1006,7 +1007,7 @@ export const DashboardClient: React.FC = () => {
                   Community Suggestions
                 </span>
                 <div className="flex flex-wrap items-center justify-center gap-2 max-w-md">
-                  {["user_f773df22", "raj", "letmesolo"].map((h) => (
+                  {Array.from(new Set([userProfile?.handle || "user_f773df22", "raj", "letmesolo"])).map((h) => (
                     <button
                       key={h}
                       onClick={() => {
@@ -1024,7 +1025,7 @@ export const DashboardClient: React.FC = () => {
 
               {!isSearchingProfile && !searchError && (
                 <div className="text-center mt-4 select-none">
-                  <span className="inline-block text-[9px] font-black uppercase tracking-widest text-stone-300/80">
+                  <span className="hidden sm:inline-block text-[9px] font-black uppercase tracking-widest text-stone-300/80">
                     Press <kbd className="font-mono bg-stone-100 border border-stone-200/50 px-1 py-0.5 rounded text-[8px]">Enter</kbd> to search or visit page
                   </span>
                 </div>

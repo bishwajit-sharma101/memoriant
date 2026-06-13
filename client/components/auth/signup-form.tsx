@@ -30,9 +30,24 @@ export const SignUpForm: React.FC = () => {
 
   const validate = () => {
     const newErrors: typeof errors = {};
-    if (!name.trim()) newErrors.name = "Required";
-    if (!email) newErrors.email = "Required";
-    if (!password) newErrors.password = "Required";
+    if (!name.trim()) {
+      newErrors.name = "Required";
+    } else if (name.length > 100) {
+      newErrors.name = "Max 100 characters";
+    }
+
+    if (!email) {
+      newErrors.email = "Required";
+    } else if (email.length > 100) {
+      newErrors.email = "Max 100 characters";
+    }
+
+    if (!password) {
+      newErrors.password = "Required";
+    } else if (password.length > 72) {
+      newErrors.password = "Max 72 characters";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -88,6 +103,7 @@ export const SignUpForm: React.FC = () => {
           onChange={(e) => setName(e.target.value)}
           error={errors.name}
           disabled={isLoading}
+          maxLength={100}
         />
       </div>
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[400ms] fill-mode-both mt-2">
@@ -99,6 +115,7 @@ export const SignUpForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
           disabled={isLoading}
+          maxLength={100}
         />
       </div>
       <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[600ms] fill-mode-both mt-2">
@@ -110,6 +127,7 @@ export const SignUpForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
           disabled={isLoading}
+          maxLength={72}
           rightElement={
             <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-[10px] font-bold text-stone-400 uppercase tracking-widest hover:text-stone-900 transition-colors">
               {showPassword ? "Hide" : "Show"}
