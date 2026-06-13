@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://i.imgur.com/nJgq78f.png" alt="Memoriant Logo" width="120"/>
+  <img src="https://github.com/user-attachments/assets/9fd5fb74-90b3-4276-9fdf-d3c157711ecc" alt="Memoriant Logo" width="120"/>
   <h1>Memoriant — Personal Bookmark Vault</h1>
   <p><em>A premium, test-driven personal bookmark vault—built like a hybrid of Linktree and Pocket.</em></p>
   
@@ -13,6 +13,9 @@
     Engineered to provide rock-solid data isolation, clean privacy controls, and great mobile ergonomics. <br/>
     <em>Developed as the final build task for the EagerMinds Software Developer Assessment.</em>
   </p>
+
+  <br/>
+  <img src="https://github.com/user-attachments/assets/897724cf-8231-4fce-b367-880f46a12f66" alt="Memoriant Loading Showcase" width="100%"/>
 </div>
 
 ---
