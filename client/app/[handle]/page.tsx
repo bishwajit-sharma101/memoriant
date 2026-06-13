@@ -34,6 +34,17 @@ export default async function PublicProfilePage(props: { params: Promise<{ handl
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-900 font-sans flex justify-center py-12 px-4 sm:py-24">
       <div className="w-full max-w-[340px] flex flex-col items-center">
+        {/* Back Button */}
+        <Link
+          href="/dashboard?tab=search"
+          className="self-start mb-8 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors group cursor-pointer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3.5 h-3.5 transform transition-transform group-hover:-translate-x-0.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+          </svg>
+          Back
+        </Link>
+
         {/* Avatar stack */}
         <div className="h-20 w-20 rounded-full bg-stone-900 border-4 border-white flex items-center justify-center text-white font-black text-xl shadow-lg">
           {initialLetters}

@@ -42,6 +42,7 @@ const isValidUrl = (url: string) => {
 };
 
 export const DashboardClient: React.FC = () => {
+  const router = useRouter();
   const [supabase] = useState(() => createClient());
 
   // User Profile
@@ -50,7 +51,7 @@ export const DashboardClient: React.FC = () => {
   // Core Bookmarks Database
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"vault" | "bio" | "tags" | "settings">("vault");
+  const [activeTab, setActiveTab] = useState<"vault" | "bio" | "tags" | "settings" | "search">("vault");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -75,8 +76,41 @@ export const DashboardClient: React.FC = () => {
   const [toast, setToast] = useState<string | null>(null);
   const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Dynamic search placeholder for mobile responsiveness
+  const [placeholderText, setPlaceholderText] = useState("Search vault...");
+
+  useEffect(() => {
+    const updatePlaceholder = () => {
+      if (window.innerWidth < 768) {
+        setPlaceholderText("Search...");
+      } else {
+        setPlaceholderText("Search reference vault... (Press '/' to focus)");
+      }
+    };
+    updatePlaceholder();
+    window.addEventListener("resize", updatePlaceholder);
+    return () => window.removeEventListener("resize", updatePlaceholder);
+  }, []);
+
+  // Parse query tab parameter on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      if (tabParam === "search" || tabParam === "bio" || tabParam === "vault") {
+        setActiveTab(tabParam as any);
+      }
+    }
+  }, []);
+
   // DOM Refs
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const profileSearchInputRef = useRef<HTMLInputElement>(null);
+
+  // Search profile states
+  const [searchProfileHandle, setSearchProfileHandle] = useState("");
+  const [isSearchingProfile, setIsSearchingProfile] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   // Fetch from Supabase on Mount
   useEffect(() => {
@@ -185,8 +219,13 @@ export const DashboardClient: React.FC = () => {
       // Focus Search: '/'
       if (e.key === "/") {
         e.preventDefault();
-        searchInputRef.current?.focus();
-        triggerToast("🔍 Search input focused");
+        if (activeTab === "search") {
+          profileSearchInputRef.current?.focus();
+          triggerToast("🔍 Profile search input focused");
+        } else {
+          searchInputRef.current?.focus();
+          triggerToast("🔍 Reference search input focused");
+        }
         return;
       }
 
@@ -230,6 +269,38 @@ export const DashboardClient: React.FC = () => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   });
+
+  // Action: Search profile by handle
+  const handleProfileSearch = async (val: string) => {
+    const cleanHandle = val.trim().replace("@", "");
+    if (!cleanHandle) return;
+
+    if (cleanHandle.length < 3) {
+      setSearchError("Handle must be at least 3 characters");
+      return;
+    }
+
+    setSearchError(null);
+    setIsSearchingProfile(true);
+
+    try {
+      const { data } = await supabase
+        .from("profiles")
+        .select("handle")
+        .eq("handle", cleanHandle)
+        .maybeSingle();
+
+      if (data) {
+        router.push(`/${cleanHandle}`);
+      } else {
+        setIsSearchingProfile(false);
+        setSearchError(`Profile @${cleanHandle} does not exist`);
+      }
+    } catch (err) {
+      setIsSearchingProfile(false);
+      setSearchError("An error occurred during search. Please try again.");
+    }
+  };
 
   // Action: Toggle Public Bio-Link Status
   const handleTogglePublic = async (id: string, e: React.MouseEvent) => {
@@ -444,6 +515,22 @@ export const DashboardClient: React.FC = () => {
                 {bookmarks.filter((b) => b.isPublic).length}
               </span>
             </button>
+
+            <button
+              onClick={() => { setActiveTab("search"); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                activeTab === "search"
+                  ? "bg-stone-900 text-white shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)]"
+                  : "text-stone-500 hover:bg-stone-200/45 hover:text-stone-900"
+              }`}
+            >
+              <span className="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                Search Profiles
+              </span>
+            </button>
           </nav>
 
           {/* Quick Tags Filter Section */}
@@ -474,12 +561,16 @@ export const DashboardClient: React.FC = () => {
         {/* User Account Controls */}
         <div className="p-4 border-t border-stone-200/40 bg-stone-100/30 flex flex-col gap-2">
           <div className="flex items-center gap-3 px-2 py-1.5">
-            <div className="h-8 w-8 rounded-full bg-stone-300 flex items-center justify-center font-black text-xs text-stone-700 border border-stone-400/20 shadow-inner">
-              EM
+            <div className="h-8 w-8 rounded-full bg-stone-900 flex items-center justify-center font-black text-xs text-white border border-stone-450/10 shadow-inner">
+              {userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : (userProfile?.handle ? userProfile.handle.charAt(0).toUpperCase() : "U")}
             </div>
-            <div className="flex flex-col text-left">
-              <span className="text-[10px] font-black tracking-wide text-stone-800">EagerMinds Team</span>
-              <span className="text-[8px] font-bold text-stone-400 uppercase tracking-widest mt-0.5">Workspace Member</span>
+            <div className="flex flex-col text-left max-w-[150px]">
+              <span className="text-[10px] font-black tracking-wide text-stone-800 truncate">
+                {userProfile?.full_name || userProfile?.handle || "User"}
+              </span>
+              <span className="text-[8px] font-bold text-stone-400 uppercase tracking-widest mt-0.5 truncate">
+                {userProfile?.handle ? `@${userProfile.handle}` : "Vault Owner"}
+              </span>
             </div>
           </div>
 
@@ -497,50 +588,77 @@ export const DashboardClient: React.FC = () => {
 
       {/* 2. Main content Explorer */}
       <main className="flex-1 flex flex-col h-full bg-[#FAF8F5] relative z-20 overflow-hidden">
-        
-        {/* Workspace Toolbar Header */}
         <header className="h-20 border-b border-stone-200/40 px-4 md:px-8 flex items-center justify-between shrink-0 bg-white/35 backdrop-blur-md gap-3 md:gap-4">
-          <button
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden p-2 -ml-2 text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          </button>
-
-          {/* Real-time search bar */}
-          <div className="flex-1 max-w-lg relative">
-            <div className="absolute inset-y-0 left-3 md:left-4 flex items-center pointer-events-none text-stone-400">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          <div className="flex items-center gap-4 shrink-0">
+            {/* Mobile menu toggle */}
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 -ml-2 text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
-            </div>
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Search reference vault... (Press '/' to focus)"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setKeyboardIndex(-1);
-              }}
-              className="w-full pl-10 md:pl-11 pr-10 md:pr-14 py-2.5 rounded-full border border-stone-200/70 bg-white text-xs font-semibold focus:outline-none focus:border-stone-900 focus:shadow-sm transition-all"
-            />
-            <div className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 items-center gap-1 font-mono text-[8px] font-bold text-stone-400 bg-stone-100 border border-stone-200/50 px-1.5 py-0.5 rounded shadow-sm">
-              /
+            </button>
+
+            {/* Back button next to search bar */}
+            <button
+              onClick={() => router.push("/")}
+              className="hidden md:flex p-2.5 rounded-full border border-stone-200/70 bg-white hover:bg-stone-50 hover:border-stone-900/30 text-stone-500 hover:text-stone-900 transition-all duration-300 shadow-sm hover:shadow active:scale-95 cursor-pointer items-center justify-center shrink-0"
+              title="Back to Landing Page"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+              </svg>
+            </button>
+
+            {/* Premium Breadcrumbs (Desktop Only) */}
+            <div className="hidden md:flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-stone-400 select-none">
+              <span>Workspace</span>
+              <span>/</span>
+              <span className="text-stone-850">
+                {activeTab === "vault" && "Private Vault"}
+                {activeTab === "bio" && "Bio Link Profile"}
+                {activeTab === "search" && "Search Profiles"}
+              </span>
             </div>
           </div>
 
-          {/* Quick Create controls */}
-          <div className="hidden md:flex items-center gap-3">
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="rounded-full bg-stone-900 px-5 py-2.5 text-[9px] font-black uppercase tracking-widest text-white shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center gap-2 cursor-pointer"
-            >
-              <span>Add Reference</span>
-              <span className="font-mono bg-white/20 px-1.5 py-0.5 rounded text-[8px]">N</span>
-            </button>
+          {/* Conditional Real-time search bar (only on Private Vault) */}
+          {activeTab === "vault" && (
+            <div className="flex-1 max-w-lg relative animate-fade-in mx-4">
+              <div className="absolute inset-y-0 left-3 md:left-4 flex items-center pointer-events-none text-stone-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </div>
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder={placeholderText}
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setKeyboardIndex(-1);
+                }}
+                className="w-full pl-10 md:pl-11 pr-10 md:pr-14 py-2.5 rounded-full border border-stone-200/70 bg-white text-xs font-semibold focus:outline-none focus:border-stone-900 focus:shadow-sm transition-all"
+              />
+              <div className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 items-center gap-1 font-mono text-[8px] font-bold text-stone-400 bg-stone-100 border border-stone-200/50 px-1.5 py-0.5 rounded shadow-sm">
+                /
+              </div>
+            </div>
+          )}
+
+          {/* Right side controls */}
+          <div className="flex items-center gap-3 shrink-0">
+            {activeTab === "vault" && (
+              <button
+                onClick={() => setIsAddModalOpen(true)}
+                className="hidden md:flex rounded-full bg-stone-900 px-5 py-2.5 text-[9px] font-black uppercase tracking-widest text-white shadow-[0_10px_20px_-5px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 items-center gap-2 cursor-pointer"
+              >
+                <span>Add Reference</span>
+                <span className="font-mono bg-white/20 px-1.5 py-0.5 rounded text-[8px]">N</span>
+              </button>
+            )}
           </div>
         </header>
 
@@ -557,7 +675,18 @@ export const DashboardClient: React.FC = () => {
 
         {/* Tab Viewport */}
         <div className="flex-1 overflow-y-auto p-8 scroll-mt-20">
-          
+          {/* Mobile-only back button */}
+          <button
+            onClick={() => router.push("/")}
+            className="md:hidden flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors mb-6 cursor-pointer"
+            title="Back to Landing Page"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Exit to Homepage
+          </button>
+
           {/* Tab 1: Vault Inbox list */}
           {activeTab === "vault" && (
             <div className="max-w-5xl mx-auto flex flex-col gap-6 animate-fade-in">
@@ -567,7 +696,7 @@ export const DashboardClient: React.FC = () => {
                     {selectedTag ? `#${selectedTag}` : "All References"}
                   </h1>
                   <span className="text-[8px] font-bold text-stone-400 uppercase tracking-widest mt-1">
-                    {isLoading ? "Loading..." : `Showing ${filteredBookmarks.length} item${filteredBookmarks.length === 1 ? "" : "s"}`}
+                    {isLoading ? "Loading..." : `Showing ${filteredBookmarks.length} reference${filteredBookmarks.length === 1 ? "" : "s"}`}
                   </span>
                 </div>
               </div>
@@ -752,10 +881,14 @@ export const DashboardClient: React.FC = () => {
                     <div className="flex flex-col items-center mt-6 w-full">
                       {/* Avatar stack */}
                       <div className="h-14 w-14 rounded-full bg-stone-900 border-2 border-white flex items-center justify-center text-white font-black text-sm shadow-md">
-                        EM
+                        {userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : (userProfile?.handle ? userProfile.handle.charAt(0).toUpperCase() : "U")}
                       </div>
-                      <span className="text-xs font-black tracking-wider text-stone-850 mt-3">@eagerminds</span>
-                      <span className="text-[9px] font-bold text-stone-400 tracking-wider mt-0.5">My Resource Vault</span>
+                      <span className="text-xs font-black tracking-wider text-stone-850 mt-3">
+                        {userProfile?.handle ? `@${userProfile.handle}` : "@username"}
+                      </span>
+                      <span className="text-[9px] font-bold text-stone-400 tracking-wider mt-0.5">
+                        {userProfile?.full_name ? `${userProfile.full_name}'s Vault` : "My Resource Vault"}
+                      </span>
 
                       {/* Mock bio buttons list */}
                       <div className="w-full flex flex-col gap-2.5 items-center justify-center mt-6 max-h-[300px] overflow-y-auto scrollbar-none px-1">
@@ -789,6 +922,113 @@ export const DashboardClient: React.FC = () => {
                 </div>
 
               </div>
+            </div>
+          )}
+
+          {/* Tab 3: Search Profiles */}
+          {activeTab === "search" && (
+            <div className="max-w-4xl mx-auto flex flex-col gap-6 animate-fade-in select-none relative z-10">
+              
+              {/* Premium ambient light spot overlay */}
+              <div className="absolute top-[-100px] left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-gradient-to-b from-stone-200/20 to-transparent blur-[120px] pointer-events-none -z-10" />
+
+              {/* Header section */}
+              <div className="text-center max-w-xl mx-auto mt-12 flex flex-col gap-3">
+                <span className="text-[9px] font-black uppercase tracking-[0.25em] text-stone-400">Community Hub</span>
+                <h1 className="text-3xl font-black tracking-tight text-stone-900 leading-none">Discover Public Bios</h1>
+                <p className="text-xs font-semibold text-stone-500 max-w-xs sm:max-w-sm mx-auto leading-relaxed mt-1">
+                  Lookup creator handles, explore public reference vaults, and explore custom bio layouts instantly.
+                </p>
+              </div>
+
+              {/* Main Search Input Widget */}
+              <div className="max-w-xl mx-auto w-full mt-6">
+                <div className="relative group">
+                  {/* Subtle outer backdrop glow */}
+                  <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-stone-200/50 via-stone-300/30 to-stone-200/50 opacity-20 blur group-hover:opacity-40 transition duration-1000 group-focus-within:opacity-50" />
+                  
+                  <div className="relative flex items-center bg-white/60 backdrop-blur-md border border-stone-200 rounded-2xl shadow-sm focus-within:border-stone-900 focus-within:shadow-[0_8px_30px_rgba(0,0,0,0.02)] transition-all duration-300">
+                    <div className="pl-6 flex items-center pointer-events-none text-stone-400">
+                      <span className="text-stone-400 font-bold text-lg mr-1 select-none">@</span>
+                    </div>
+                    <input
+                      ref={profileSearchInputRef}
+                      type="text"
+                      placeholder="username"
+                      value={searchProfileHandle}
+                      onChange={(e) => {
+                        setSearchProfileHandle(e.target.value);
+                        if (searchError) setSearchError(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleProfileSearch(searchProfileHandle);
+                        }
+                      }}
+                      disabled={isSearchingProfile}
+                      className="w-full pl-1 pr-24 py-4 text-base font-black text-stone-850 placeholder:text-stone-300 focus:outline-none bg-transparent disabled:opacity-50"
+                    />
+                    <div className="absolute right-3 flex items-center">
+                      {isSearchingProfile ? (
+                        <div className="h-8.5 px-4 rounded-xl bg-stone-900 text-white text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
+                          <svg className="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <span>Routing</span>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleProfileSearch(searchProfileHandle)}
+                          className="h-8.5 px-4 rounded-xl bg-stone-900 text-white text-[8px] font-black uppercase tracking-widest hover:bg-stone-850 active:scale-95 transition-all flex items-center justify-center cursor-pointer shadow-sm hover:shadow"
+                        >
+                          Search
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Inline error feedback badge */}
+                {searchError && (
+                  <div className="mt-4 mx-auto max-w-sm flex items-center justify-center gap-2 text-[9px] font-black uppercase tracking-widest text-red-500 bg-red-50/50 border border-red-200/30 py-2.5 px-4 rounded-xl animate-shake">
+                    <svg xmlns="http://www.w3.org/2505/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                    </svg>
+                    <span>{searchError}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Suggestions row for premium testing */}
+              <div className="flex flex-col items-center gap-3 mt-6 animate-fade-in">
+                <span className="text-[9px] font-black uppercase tracking-widest text-stone-300 select-none">
+                  Community Suggestions
+                </span>
+                <div className="flex flex-wrap items-center justify-center gap-2 max-w-md">
+                  {["alex_dev", "rahul", "design_hub"].map((h) => (
+                    <button
+                      key={h}
+                      onClick={() => {
+                        setSearchProfileHandle(h);
+                        handleProfileSearch(h);
+                      }}
+                      disabled={isSearchingProfile}
+                      className="px-3.5 py-1.5 rounded-full border border-stone-255/10 bg-white/70 hover:bg-stone-50 hover:border-stone-900 text-[9px] font-black uppercase tracking-wider text-stone-500 hover:text-stone-950 transition-all duration-300 shadow-sm cursor-pointer disabled:opacity-50"
+                    >
+                      @{h}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {!isSearchingProfile && !searchError && (
+                <div className="text-center mt-4 select-none">
+                  <span className="inline-block text-[9px] font-black uppercase tracking-widest text-stone-300/80">
+                    Press <kbd className="font-mono bg-stone-100 border border-stone-200/50 px-1 py-0.5 rounded text-[8px]">Enter</kbd> to search or visit page
+                  </span>
+                </div>
+              )}
             </div>
           )}
 

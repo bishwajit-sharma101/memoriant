@@ -29,8 +29,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
   // Transition exit state
   const [isExiting, setIsExiting] = useState(false);
   
-  // Mobile Menu state
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
 
   // Profile Dropdown state
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -62,8 +61,8 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
   const [searchQuery, setSearchQuery] = useState("");
   const [tagInput, setTagInput] = useState("");
   const [detectedTags, setDetectedTags] = useState<string[]>([]);
-  const [collabHovered, setCollabHovered] = useState(false);
-  const [collabLogs, setCollabLogs] = useState<string[]>(["Workspace initialized."]);
+  const [profileHovered, setProfileHovered] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<"alex_dev" | "sarah_design">("alex_dev");
 
   // Mock search bookmark data
   const MOCK_SEARCH_DATA: MockBookmark[] = [
@@ -208,11 +207,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
     }
   }, [activeStep]);
 
-  // Workspace mock notifications
-  const handleCollabAction = (name: string) => {
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    setCollabLogs((prev) => [`[${time}] ✨ ${name} joined shared pool!`, ...prev.slice(0, 2)]);
-  };
+
 
   const handleNavigate = (path: string) => {
     setIsExiting(true);
@@ -280,63 +275,6 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
       >
         <div className="absolute inset-0 -z-30 h-full w-full bg-[#FAF8F5] bg-[linear-gradient(to_right,#e5e5e030_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e030_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)]" />
 
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 z-50 bg-[#FAF8F5] flex flex-col md:hidden animate-in fade-in zoom-in-95 duration-300">
-            <div className="flex h-20 items-center justify-between px-6 sm:px-8 border-b border-stone-200/40">
-              <div className="flex items-center gap-3">
-                <img 
-                  src="/logo.png" 
-                  alt="EagerMinds Logo" 
-                  className="h-9 w-9 object-contain drop-shadow-sm" 
-                />
-                <span className="text-sm font-black uppercase tracking-[0.2em] text-stone-900">
-                  EagerMinds
-                </span>
-              </div>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 -mr-2 text-stone-500 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            
-            <div className="flex flex-col px-6 py-10 gap-8 flex-1 overflow-y-auto">
-              <nav className="flex flex-col gap-6 text-sm font-black uppercase tracking-widest text-stone-600">
-                <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-stone-200/50 pb-4">Features</a>
-                <a href="#workflow" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-stone-200/50 pb-4">How it works</a>
-                <a href="#stats" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-stone-200/50 pb-4">Performance</a>
-              </nav>
-              
-              <div className="mt-auto flex flex-col gap-4">
-                {isLoggedIn ? (
-                  <button
-                    onClick={() => handleNavigate("/dashboard")}
-                    className="w-full rounded-full bg-stone-900 px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)]"
-                  >
-                    Go to Dashboard
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => handleNavigate("/signin")}
-                      className="w-full rounded-full border border-stone-300 px-6 py-4 text-xs font-bold uppercase tracking-widest text-stone-700 hover:bg-stone-50"
-                    >
-                      Sign In
-                    </button>
-                    <button
-                      onClick={() => handleNavigate("/signup")}
-                      className="w-full rounded-full bg-stone-900 px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)]"
-                    >
-                      Get Started
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Navigation Header */}
         <header className="sticky top-0 z-40 w-full border-b border-stone-200/40 bg-[#FAF8F5]/60 backdrop-blur-md animate-in fade-in duration-1000">
           <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8">
@@ -351,15 +289,9 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
               </span>
             </div>
 
-            <nav className="hidden md:flex items-center gap-10 text-[10px] font-bold uppercase tracking-widest text-stone-400">
-              <a href="#features" className="hover:text-stone-900 transition-colors">Features</a>
-              <a href="#workflow" className="hover:text-stone-900 transition-colors">How it works</a>
-              <a href="#stats" className="hover:text-stone-900 transition-colors">Performance</a>
-            </nav>
-
             <div className="flex items-center gap-3">
               {isLoggedIn ? (
-                <div className="hidden md:flex items-center relative" ref={dropdownRef}>
+                <div className="flex items-center relative" ref={dropdownRef}>
                   <button
                     onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                     className="flex items-center gap-2 rounded-full border border-stone-200 bg-white/50 px-2 py-1.5 hover:bg-white hover:shadow-sm transition-all cursor-pointer"
@@ -413,32 +345,21 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
                   )}
                 </div>
               ) : (
-                <div className="hidden md:flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <button
                     onClick={() => handleNavigate("/signin")}
-                    className="rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-stone-500 hover:bg-stone-100/50 hover:text-stone-900 transition-all cursor-pointer"
+                    className="rounded-full px-3 sm:px-5 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-stone-500 hover:bg-stone-100/50 hover:text-stone-900 transition-all cursor-pointer"
                   >
                     Sign In
                   </button>
                   <button
                     onClick={() => handleNavigate("/signup")}
-                    className="rounded-full bg-stone-900 px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
+                    className="rounded-full bg-stone-900 px-4 sm:px-6 py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white shadow-[0_10px_25px_-5px_rgba(0,0,0,0.2)] hover:shadow-[0_15px_30px_-5px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 cursor-pointer"
                   >
                     Get Started
                   </button>
                 </div>
               )}
-
-              {/* Mobile Menu Toggle */}
-              <button 
-                onClick={() => setIsMobileMenuOpen(true)} 
-                className="flex md:hidden items-center justify-center p-2 -mr-2 text-stone-600 hover:text-stone-900 transition-colors cursor-pointer"
-                aria-label="Open Mobile Menu"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
-              </button>
             </div>
           </div>
         </header>
@@ -487,7 +408,7 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
             </div>
 
             {/* 3D Floating Canvas */}
-            <div className="lg:col-span-5 h-[500px] w-full flex items-center justify-center perspective-[2000px] preserve-3d scale-75 sm:scale-100 origin-center select-none relative animate-in fade-in zoom-in-95 duration-1000 delay-300 fill-mode-both">
+            <div className="lg:col-span-5 h-[320px] sm:h-[400px] lg:h-[500px] w-full flex items-center justify-center perspective-[2000px] preserve-3d scale-[0.55] sm:scale-75 lg:scale-100 origin-center select-none relative animate-in fade-in zoom-in-95 duration-1000 delay-300 fill-mode-both">
               {/* Tags Layer */}
               <div className="absolute z-10 animate-float-fast pointer-events-auto transform hover:translate-z-[40px] transition-transform duration-500" style={{ right: '15%', top: '15%' }}>
                 <div className="flex flex-col gap-2.5">
@@ -844,37 +765,107 @@ export const LandingPageClient: React.FC<{ isLoggedIn?: boolean, userEmail?: str
               </div>
             </div>
 
-            {/* Playable Card 3: Team badging / Collab Demo */}
+            {/* Playable Card 3: Share Public Profile */}
             <div
-              onMouseEnter={() => setCollabHovered(true)}
-              onMouseLeave={() => setCollabHovered(false)}
+              onMouseEnter={() => setProfileHovered(true)}
+              onMouseLeave={() => setProfileHovered(false)}
               className={`rounded-2xl border border-stone-200/50 bg-white/40 backdrop-blur p-8 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.01] hover:-translate-y-0.5 flex flex-col justify-between h-[380px] reveal-on-scroll ${featuresRevealed ? "revealed" : ""}`}
               style={{ transitionDelay: '300ms' }}
             >
               <div>
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#EAE6DF] text-stone-900 mb-6">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.2} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935-2.186 2.25 2.25 0 00-3.935 2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-black text-stone-900 tracking-tight">Curated Team Workspaces</h3>
+                <h3 className="text-lg font-black text-stone-900 tracking-tight">Share Public Profile</h3>
                 
-                {/* Simulated Avatar badge buttons */}
-                <div className="flex gap-2.5 mt-4 items-center h-8">
-                  <button onClick={() => handleCollabAction("John")} className="h-7 w-7 rounded-full bg-stone-900 border border-white flex items-center justify-center text-[10px] font-black text-white hover:scale-110 active:scale-95 shadow cursor-pointer transition-transform duration-300">J</button>
-                  <button onClick={() => handleCollabAction("Sarah")} className="h-7 w-7 rounded-full bg-[#EAE6DF] border border-white flex items-center justify-center text-[10px] font-black text-stone-700 hover:scale-110 active:scale-95 shadow cursor-pointer transition-transform duration-300">S</button>
-                  <button onClick={() => handleCollabAction("Alex")} className="h-7 w-7 rounded-full bg-stone-200 border border-white flex items-center justify-center text-[10px] font-black text-stone-800 hover:scale-110 active:scale-95 shadow cursor-pointer transition-transform duration-300">A</button>
-                  <span className="text-[9px] font-bold text-stone-400 uppercase tracking-widest pl-1">click to join</span>
+                {/* Simulated handle visits */}
+                <div className="flex gap-2 mt-4 items-center h-8">
+                  <button 
+                    onClick={() => setSelectedProfile("alex_dev")} 
+                    className={`h-7 px-3.5 rounded-full border text-[9px] font-black transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer ${
+                      selectedProfile === "alex_dev" 
+                        ? "bg-stone-900 border-stone-900 text-white shadow-sm" 
+                        : "bg-[#EAE6DF] border-stone-300/40 text-stone-700 hover:bg-stone-200"
+                    }`}
+                  >
+                    @alex_dev
+                  </button>
+                  <button 
+                    onClick={() => setSelectedProfile("sarah_design")} 
+                    className={`h-7 px-3.5 rounded-full border text-[9px] font-black transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer ${
+                      selectedProfile === "sarah_design" 
+                        ? "bg-stone-900 border-stone-900 text-white shadow-sm" 
+                        : "bg-[#EAE6DF] border-stone-300/40 text-stone-700 hover:bg-stone-200"
+                    }`}
+                  >
+                    @sarah_design
+                  </button>
+                  <span className="text-[9px] font-bold text-stone-400 uppercase tracking-widest pl-1">Preview</span>
                 </div>
               </div>
 
-              {/* Dynamic Notification log */}
-              <div className="flex-1 w-full bg-stone-900 text-stone-300 font-mono text-[9px] p-4 rounded-2xl mt-4 overflow-y-auto max-h-36 flex flex-col gap-1.5 select-text border border-stone-950">
-                {collabLogs.map((log, index) => (
-                  <div key={index} className="leading-normal border-b border-stone-800/40 pb-1 last:border-b-0 animate-in fade-in slide-in-from-left-2 duration-300">
-                    {log}
+              {/* Dynamic Public Profile Mock Preview */}
+              <div className="flex-1 w-full bg-[#FAF8F5]/80 rounded-2xl border border-stone-200/50 p-4 mt-4 flex flex-col justify-between overflow-hidden shadow-inner h-[180px]">
+                {/* Simulated Browser Address Bar */}
+                <div className="flex items-center gap-1.5 bg-white border border-stone-200/50 rounded-full px-3 py-1 mb-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-550 animate-pulse" />
+                  <span className="text-[8px] font-mono text-stone-450 select-all truncate">
+                    eagerminds.bio/{selectedProfile}
+                  </span>
+                </div>
+
+                {/* Profile Details */}
+                {selectedProfile === "alex_dev" ? (
+                  <div className="flex-1 flex flex-col justify-between animate-in fade-in duration-300">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-7 w-7 rounded-full bg-stone-900 text-white flex items-center justify-center font-bold text-[10px] shadow-sm">
+                        AR
+                      </div>
+                      <div className="text-left">
+                        <h4 className="text-[10px] font-black text-stone-900 leading-none">Alex Rivers</h4>
+                        <span className="text-[8px] font-bold text-stone-400">@alex_dev</span>
+                      </div>
+                    </div>
+
+                    {/* Bookmarks */}
+                    <div className="flex flex-col gap-1.5 mt-2">
+                      <div className="w-full bg-white border border-stone-200/40 hover:border-stone-900/20 px-2.5 py-1.5 rounded-lg text-[9px] font-bold text-stone-800 text-left flex justify-between items-center transition-colors">
+                        <span className="truncate max-w-[120px]">Next.js 16 Starter Template</span>
+                        <span className="text-[7px] uppercase bg-stone-100 text-stone-500 px-1 rounded">#dev</span>
+                      </div>
+                      <div className="w-full bg-white border border-stone-200/40 hover:border-stone-900/20 px-2.5 py-1.5 rounded-lg text-[9px] font-bold text-stone-800 text-left flex justify-between items-center transition-colors">
+                        <span className="truncate max-w-[120px]">My Supabase RLS Snippets</span>
+                        <span className="text-[7px] uppercase bg-stone-100 text-stone-500 px-1 rounded">#database</span>
+                      </div>
+                    </div>
                   </div>
-                ))}
+                ) : (
+                  <div className="flex-1 flex flex-col justify-between animate-in fade-in duration-300">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-7 w-7 rounded-full bg-[#EAE6DF] text-stone-850 flex items-center justify-center font-bold text-[10px] shadow-sm">
+                        SC
+                      </div>
+                      <div className="text-left">
+                        <h4 className="text-[10px] font-black text-stone-900 leading-none">Sarah Chen</h4>
+                        <span className="text-[8px] font-bold text-stone-400">@sarah_design</span>
+                      </div>
+                    </div>
+
+                    {/* Bookmarks */}
+                    <div className="flex flex-col gap-1.5 mt-2">
+                      <div className="w-full bg-white border border-stone-200/40 hover:border-stone-900/20 px-2.5 py-1.5 rounded-lg text-[9px] font-bold text-stone-800 text-left flex justify-between items-center transition-colors">
+                        <span className="truncate max-w-[120px]">Figma Web Design Kit</span>
+                        <span className="text-[7px] uppercase bg-stone-100 text-stone-500 px-1 rounded">#figma</span>
+                      </div>
+                      <div className="w-full bg-white border border-stone-200/40 hover:border-stone-900/20 px-2.5 py-1.5 rounded-lg text-[9px] font-bold text-stone-800 text-left flex justify-between items-center transition-colors">
+                        <span className="truncate max-w-[120px]">Sleek CSS Gradients</span>
+                        <span className="text-[7px] uppercase bg-stone-100 text-stone-500 px-1 rounded">#design</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
